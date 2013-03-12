@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node name="/org/bozzo/Quorra/QuorraObject">
+	<interface name="org.bozzo.quorra.plg.SqueezeSlaveInterface">
+		<annotation name="org.freedesktop.DBus.GLib.CSymbol" value="quorra_plg_squeezeslave_interface" />
+		<method name="Stop">
+			<annotation name="org.freedesktop.DBus.GLib.CSymbol"
+				value="stop" />
+			<arg type="s" name="name" direction="in" />
+			<arg type="i" name="time" direction="in" />
+			<arg type="b" name="success" direction="out" />
+		</method>
+		<method name="Pause">
+			<annotation name="org.freedesktop.DBus.GLib.CSymbol"
+				value="pause" />
+			<arg type="s" name="name" direction="in" />
+			<arg type="b" name="success" direction="out" />
+		</method>
+		<signal name="songChanged">
+			<arg type="s" name="newSong" direction="out" />
+		</signal>
+	</interface>
+</node>
