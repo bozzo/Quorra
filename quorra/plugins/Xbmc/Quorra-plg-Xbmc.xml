@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node name="/org/bozzo/Quorra/plg/XbmcObject">
+	<interface name="org.bozzo.quorra.plg.XbmcInterface">
+		<annotation name="org.freedesktop.DBus.GLib.CSymbol" value="quorra_plg_xbmc_interface" />
+		<method name="Stop">
+			<annotation name="org.freedesktop.DBus.GLib.CSymbol"
+				value="stop" />
+			<arg type="b" name="success" direction="out" />
+		</method>
+		<method name="Pause">
+			<annotation name="org.freedesktop.DBus.GLib.CSymbol"
+				value="pause" />
+			<arg type="b" name="success" direction="out" />
+		</method>
+		<signal name="videoStarted">
+			<arg type="s" name="name" direction="out" />
+		</signal>
+	</interface>
+</node>
