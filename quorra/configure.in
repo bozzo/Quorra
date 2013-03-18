@@ -1,0 +1,32 @@
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ([2.69])
+AC_INIT(quorra, 0.0.1, bozzo@bozzo.org)
+AM_INIT_AUTOMAKE(quorra, 0.0.1)
+#AC_CONFIG_SRCDIR([DummyObject.h])
+AC_CONFIG_HEADERS([config.h])
+
+# Checks for programs.
+AC_PROG_CC
+
+AC_SEARCH_LIBS([g_main_loop_run], [glib-2.0],,AC_MSG_ERROR(Glib 2.0 not found.))
+AC_SUBST(GLIB_LIBS)
+AC_SUBST(GLIB_CFLAGS)
+
+# Checks for libraries.
+
+# Checks for header files.
+AC_CHECK_HEADER([dbus/dbus-glib-bindings.h])
+AC_CHECK_HEADER([dbus/dbus-glib.h])
+AC_CHECK_HEADER([glib.h])
+AC_CHECK_HEADER([glib-object.h])
+AC_CHECK_HEADER([stdlib.h])
+# Checks for typedefs, structures, and compiler characteristics.
+
+# Checks for library functions.
+AC_CONFIG_FILES([Makefile
+                 plugins/SqueezeSlave/src/Makefile
+                 quorra-core/src/Makefile])
+AC_OUTPUT
+

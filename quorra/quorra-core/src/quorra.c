@@ -1,5 +1,5 @@
 /*
- * QuorraSqueezeSlave.h
+ * quorra.c
  *
  * This file is part of Quorra.
  *
@@ -16,27 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with com_mapfactory. If not, see <http://www.gnu.org/licenses/>.
  *
- * Created on 14 mars 2013
+ * Created on 18 mars 2013
  * By bozzo
  *
  **/
 
-#ifndef QUORRASQUEEZESLAVE_H_
-#define QUORRASQUEEZESLAVE_H_
+int main (int argc, char *argv[])
+{
 
-#include <stdlib.h>
-#include <glib.h>
-#include <dbus/dbus-glib.h>
-#include <dbus/dbus-glib-bindings.h>
-
-#include "QuorraSqueezeSlaveObject.h"
-#include "QuorraSqueezeSlaveGlue.h"
-
-#define QUORRA_SQUEEZESLAVE_PATH "/org/bozzo/Quorra/plg/QuorraSqueezeSlaveObject"
-#define QUORRA_SQUEEZESLAVE_SERVICE_NAME "org.bozzo.Quorra.plg.QuorraSqueezeSlaveObject"
+	return 0;
+}
 
 
-gpointer quorra_plugin_run(gpointer data);
-
-
-#endif /* QUORRASQUEEZESLAVE_H_ */

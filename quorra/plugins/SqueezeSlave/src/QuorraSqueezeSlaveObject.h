@@ -29,8 +29,8 @@
 typedef struct QuorraSqueezeSlaveObject QuorraSqueezeSlaveObject;
 typedef struct QuorraSqueezeSlaveObjectClass QuorraSqueezeSlaveObjectClass;
 
-GType stop_get_type (void);
 GType pause_get_type (void);
+GType stop_get_type (void);
 
 
 struct QuorraSqueezeSlaveObject
@@ -44,10 +44,12 @@ struct QuorraSqueezeSlaveObjectClass
 };
 
 #define QUORRA_SQUEEZESLAVEOBJ_TYPE (quorra_squeezeslave_object_get_type ())
-/*#define QUORRA_SQUEEZESLAVEOBJ_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), HELLOWORLD_TYPE, QuorraSqueezeSlaveObjectClass))*/
+#define QUORRA_SQUEEZESLAVEOBJ_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), QUORRA_TYPE, QuorraSqueezeSlaveObjectClass))*/
 
-gboolean stop(QuorraSqueezeSlaveObject * obj, gchar * name, gint32 time, gboolean * success, GError **error);
 
 gboolean pause(QuorraSqueezeSlaveObject * obj, gchar * name, gboolean * success, GError **error);
+gboolean stop(QuorraSqueezeSlaveObject * obj, gchar * name, gint32 time, gboolean * success, GError **error);
+
+gboolean songChanged(GObject *obj);
 
 #endif /* QUORRA_SQUEEZESLAVE_OBJECT_H_ */

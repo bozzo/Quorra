@@ -18,9 +18,15 @@ along with com_mapfactory. If not, see <http://www.gnu.org/licenses/>.
 Created on 12 mars 2013
 By bozzo
 -->
-<node name="/org/bozzo/Quorra/plg/SqueezeSlaveObject">
-	<interface name="org.bozzo.quorra.plg.SqueezeSlaveInterface">
-		<annotation name="org.freedesktop.DBus.GLib.CSymbol" value="quorra_plg_squeezeslave_interface" />
+<node name="/org/bozzo/Quorra/plg/QuorraSqueezeSlaveObject">
+	<interface name="org.bozzo.quorra.plg.QuorraSqueezeSlaveInterface">
+		<annotation name="org.freedesktop.DBus.GLib.CSymbol" value="quorra_squeezeslave_interface" />
+		<method name="Pause">
+			<annotation name="org.freedesktop.DBus.GLib.CSymbol"
+				value="pause" />
+			<arg type="s" name="name" direction="in" />
+			<arg type="b" name="success" direction="out" />
+		</method>
 		<method name="Stop">
 			<annotation name="org.freedesktop.DBus.GLib.CSymbol"
 				value="stop" />
@@ -28,14 +34,8 @@ By bozzo
 			<arg type="i" name="time" direction="in" />
 			<arg type="b" name="success" direction="out" />
 		</method>
-		<method name="Pause">
-			<annotation name="org.freedesktop.DBus.GLib.CSymbol"
-				value="pause" />
-			<arg type="s" name="name" direction="in" />
-			<arg type="b" name="success" direction="out" />
-		</method>
-		<signal name="songChanged">
+		<!-- <signal name="songChanged">
 			<arg type="s" name="newSong" direction="out" />
-		</signal>
+		</signal> -->
 	</interface>
 </node>

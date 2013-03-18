@@ -29,7 +29,7 @@ G_DEFINE_TYPE(QuorraSqueezeSlaveObject, quorra_squeezeslave_object, G_TYPE_OBJEC
 
 static void quorra_squeezeslave_object_class_init (QuorraSqueezeSlaveObjectClass * quorra_squeezeslave_class)
 {
-	signalId = g_signal_new("songChanged",
+	/*signalId = g_signal_new("songChanged",
 			G_OBJECT_CLASS_TYPE(quorra_squeezeslave_class),
 			G_SIGNAL_RUN_LAST,
 			0,
@@ -40,7 +40,7 @@ static void quorra_squeezeslave_object_class_init (QuorraSqueezeSlaveObjectClass
 			1,
 			G_TYPE_INT);
 
-	g_print("dummy_object_class_init : signalId = %d\n", signalId);
+	g_print("dummy_object_class_init : signalId = %d\n", signalId);*/
 }
 
 static void quorra_squeezeslave_object_init (QuorraSqueezeSlaveObject * quorra_squeezeslave)
@@ -48,9 +48,11 @@ static void quorra_squeezeslave_object_init (QuorraSqueezeSlaveObject * quorra_s
 	dbus_g_object_type_install_info (QUORRA_SQUEEZESLAVEOBJ_TYPE,	&dbus_glib_quorra_squeezeslave_object_object_info);
 }
 
-gboolean quorra_squeezeslave_songChanged(GObject *obj)
+gboolean song_changed(GObject *obj)
 {
-
+	g_print("Sent hearbeat !\n");
+	g_signal_emit(obj, signalId, 0, 1);
+	return TRUE;
 }
 
 gboolean stop(QuorraSqueezeSlaveObject * obj, gchar * name, gint32 time, gboolean * success, GError **error)
@@ -133,11 +135,11 @@ gpointer quorra_plugin_run(gpointer data)
 	g_print ("GLib test service entering main loop\n");
 
 	/* Envoi du signal toutes les secondes */
-	//g_timeout_add (1000, (GSourceFunc)send_ping, obj);
+	//g_timeout_add (1000, (GSourceFunc)song_changed, obj);
 
 	/* Si tout s’est bien déroulé, on attend les connections */
 	g_main_loop_run (loop);
-	return TRUE;
+	return NULL;
 }
 
 int main ()

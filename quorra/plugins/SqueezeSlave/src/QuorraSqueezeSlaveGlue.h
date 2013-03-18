@@ -161,15 +161,15 @@ G_END_DECLS
 
 #include <dbus/dbus-glib.h>
 static const DBusGMethodInfo dbus_glib_quorra_squeezeslave_object_methods[] = {
-  { (GCallback) stop, dbus_glib_marshal_quorra_squeezeslave_object_BOOLEAN__STRING_INT_POINTER_POINTER, 0 },
-  { (GCallback) pause, dbus_glib_marshal_quorra_squeezeslave_object_BOOLEAN__STRING_POINTER_POINTER, 85 },
+  { (GCallback) pause, dbus_glib_marshal_quorra_squeezeslave_object_BOOLEAN__STRING_POINTER_POINTER, 0 },
+  { (GCallback) stop, dbus_glib_marshal_quorra_squeezeslave_object_BOOLEAN__STRING_INT_POINTER_POINTER, 83 },
 };
 
 const DBusGObjectInfo dbus_glib_quorra_squeezeslave_object_object_info = {  1,
   dbus_glib_quorra_squeezeslave_object_methods,
   2,
-"org.bozzo.quorra.plg.SqueezeSlaveInterface\0Stop\0S\0name\0I\0s\0time\0I\0i\0success\0O\0F\0N\0b\0\0org.bozzo.quorra.plg.SqueezeSlaveInterface\0Pause\0S\0name\0I\0s\0success\0O\0F\0N\0b\0\0\0",
-"org.bozzo.quorra.plg.SqueezeSlaveInterface\0songChanged\0\0",
+"org.bozzo.quorra.plg.QuorraSqueezeSlaveInterface\0Pause\0S\0name\0I\0s\0success\0O\0F\0N\0b\0\0org.bozzo.quorra.plg.QuorraSqueezeSlaveInterface\0Stop\0S\0name\0I\0s\0time\0I\0i\0success\0O\0F\0N\0b\0\0\0",
+"\0",
 "\0"
 };
 
