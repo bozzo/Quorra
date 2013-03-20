@@ -45,17 +45,74 @@ static void quorra_squeezeslave_object_class_init (QuorraSqueezeSlaveObjectClass
 
 static void quorra_squeezeslave_object_init (QuorraSqueezeSlaveObject * quorra_squeezeslave)
 {
+	/* FIXME add g_error or logging */
+	GError ** error = NULL;
+	GSocketConnectable * connectable;
+	GSocketAddressEnumerator *enumerator;
+	GSocketAddress  *address;
+	GCancellable  *cancellable = NULL;
+
+
 	dbus_g_object_type_install_info (QUORRA_SQUEEZESLAVEOBJ_TYPE,	&dbus_glib_quorra_squeezeslave_object_object_info);
+
+	g_print("quorra_squeezeslave_object_init : init socket");
+	quorra_squeezeslave->actionner = g_socket_new (G_SOCKET_FAMILY_IPV4, G_SOCKET_TYPE_STREAM, 0, error);
+
+	g_print("quorra_squeezeslave_object_init : parse network address");
+	connectable = g_network_address_parse ("localhost", 9090, error);
+	if (connectable == NULL)
+	{
+		return ;
+	}
+
+	g_print("quorra_squeezeslave_object_init : enumerate address");
+	enumerator = g_socket_connectable_enumerate (connectable);
+	while (!(quorra_squeezeslave->actionner) &&
+			(address = g_socket_address_enumerator_next (enumerator, cancellable, error)))
+	{
+		g_print("quorra_squeezeslave_object_init : connect");
+		if (! g_socket_connect (quorra_squeezeslave->actionner, address, cancellable, error))
+		{
+			g_print("quorra_squeezeslave_object_init : connect failed");
+			g_message ("Connection to failed: %s, trying next\n", (*error)->message);
+			g_clear_error (error);
+		}
+		g_print("quorra_squeezeslave_object_init : connect success");
+		g_object_unref (address);
+	}
+	g_object_unref (enumerator);
+
+	g_print("quorra_squeezeslave_object_init : end");
+	if (quorra_squeezeslave->actionner)
+	{
+		if (*error)
+		{
+			/* We couldn't connect to the first address, but we succeeded
+			 * in connecting to a later address.
+			 */
+			/*g_error_free (*error);*/
+		}
+	}
+	else if (*error)
+	{
+		/* Either the initial lookup failed, or else the caller
+		 * cancelled us.
+		 */
+	}
+	else
+	{
+		/*g_error_propagate (error, conn_error);*/
+	}
 }
 
-gboolean song_changed(GObject *obj)
+/*gboolean song_changed(GObject *obj)
 {
 	g_print("Sent hearbeat !\n");
 	g_signal_emit(obj, signalId, 0, 1);
 	return TRUE;
-}
+}*/
 
-gboolean stop(QuorraSqueezeSlaveObject * obj, gchar * name, gint32 time, gboolean * success, GError **error)
+gboolean quorra_squeezeslave_stop(QuorraSqueezeSlaveObject * obj, gchar * name, gint32 time, gboolean * success, GError **error)
 {
 	*success = TRUE;
 
@@ -63,7 +120,15 @@ gboolean stop(QuorraSqueezeSlaveObject * obj, gchar * name, gint32 time, gboolea
 	return TRUE;
 }
 
-gboolean pause(QuorraSqueezeSlaveObject * obj, gchar * name, gboolean * success, GError **error)
+gboolean quorra_squeezeslave_nextsong(QuorraSqueezeSlaveObject * obj, gchar * name, gint32 hops, gboolean * success, GError **error)
+{
+	*success = TRUE;
+
+	g_print ("quorra_squeezeslave_nextsong -> %s %d hops\n",name,hops);
+	return TRUE;
+}
+
+gboolean quorra_squeezeslave_pause(QuorraSqueezeSlaveObject * obj, gchar * name, gboolean * success, GError **error)
 {
 	*success = TRUE;
 

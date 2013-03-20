@@ -23,13 +23,20 @@ By bozzo
 		<annotation name="org.freedesktop.DBus.GLib.CSymbol" value="quorra_squeezeslave_interface" />
 		<method name="Pause">
 			<annotation name="org.freedesktop.DBus.GLib.CSymbol"
-				value="pause" />
+				value="quorra_squeezeslave_pause" />
 			<arg type="s" name="name" direction="in" />
+			<arg type="b" name="success" direction="out" />
+		</method>
+		<method name="NextSong">
+			<annotation name="org.freedesktop.DBus.GLib.CSymbol"
+				value="quorra_squeezeslave_nextsong" />
+			<arg type="s" name="name" direction="in" />
+			<arg type="i" name="hops" direction="in" />
 			<arg type="b" name="success" direction="out" />
 		</method>
 		<method name="Stop">
 			<annotation name="org.freedesktop.DBus.GLib.CSymbol"
-				value="stop" />
+				value="quorra_squeezeslave_stop" />
 			<arg type="s" name="name" direction="in" />
 			<arg type="i" name="time" direction="in" />
 			<arg type="b" name="success" direction="out" />

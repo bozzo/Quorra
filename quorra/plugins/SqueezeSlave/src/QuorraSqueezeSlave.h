@@ -28,6 +28,8 @@
 #include <glib.h>
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-bindings.h>
+#include <gio/gio.h>
+#include <netdb.h>
 
 #include "QuorraSqueezeSlaveObject.h"
 #include "QuorraSqueezeSlaveGlue.h"

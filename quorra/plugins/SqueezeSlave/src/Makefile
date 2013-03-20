@@ -175,7 +175,7 @@ top_srcdir = ../../..
 
 # what flags you want to pass to the C compiler & linker
 AM_CFLAGS = $(GLIB_CFLAGS) -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/include/dbus-1.0 --pedantic -Wall -O3 -rdynamic
-AM_LDFLAGS = $(GLIB_LIBS) -lgthread-2.0 -lglib-2.0 -ldbus-1 -lgobject-2.0 -ldbus-glib-1
+AM_LDFLAGS = $(GLIB_LIBS) -lgthread-2.0 -lglib-2.0 -ldbus-1 -lgobject-2.0 -ldbus-glib-1 -lgio-2.0
 quorra_plg_squeezeslave_SOURCES = QuorraSqueezeSlave.c QuorraSqueezeSlave.h QuorraSqueezeSlaveObject.h QuorraSqueezeSlaveGlue.h
 all: all-am
 
@@ -190,9 +190,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign plugins/SqueezeSlave/src/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu plugins/SqueezeSlave/src/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign plugins/SqueezeSlave/src/Makefile
+	  $(AUTOMAKE) --gnu plugins/SqueezeSlave/src/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

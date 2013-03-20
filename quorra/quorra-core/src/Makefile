@@ -189,9 +189,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign quorra-core/src/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu quorra-core/src/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign quorra-core/src/Makefile
+	  $(AUTOMAKE) --gnu quorra-core/src/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

@@ -1,0 +1,2 @@
+autoscan: warning: missing AC_CHECK_HEADERS([netdb.h]) wanted by: 
+	plugins/SqueezeSlave/src/QuorraSqueezeSlave.h:32

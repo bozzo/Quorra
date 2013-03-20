@@ -29,13 +29,16 @@
 typedef struct QuorraSqueezeSlaveObject QuorraSqueezeSlaveObject;
 typedef struct QuorraSqueezeSlaveObjectClass QuorraSqueezeSlaveObjectClass;
 
-GType pause_get_type (void);
-GType stop_get_type (void);
+GType quorra_squeezeslave_pause_get_type (void);
+GType quorra_squeezeslave_stop_get_type (void);
+GType quorra_squeezeslave_nextsong_get_type (void);
 
 
 struct QuorraSqueezeSlaveObject
 {
 	GObject parent;
+	GSocket * actionner;
+	GSocket * listener;
 };
 
 struct QuorraSqueezeSlaveObjectClass
@@ -47,9 +50,10 @@ struct QuorraSqueezeSlaveObjectClass
 #define QUORRA_SQUEEZESLAVEOBJ_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), QUORRA_TYPE, QuorraSqueezeSlaveObjectClass))*/
 
 
-gboolean pause(QuorraSqueezeSlaveObject * obj, gchar * name, gboolean * success, GError **error);
-gboolean stop(QuorraSqueezeSlaveObject * obj, gchar * name, gint32 time, gboolean * success, GError **error);
+gboolean quorra_squeezeslave_pause(QuorraSqueezeSlaveObject * obj, gchar * name, gboolean * success, GError **error);
+gboolean quorra_squeezeslave_nextsong(QuorraSqueezeSlaveObject * obj, gchar * name, gint32 hops, gboolean * success, GError **error);
+gboolean quorra_squeezeslave_stop(QuorraSqueezeSlaveObject * obj, gchar * name, gint32 time, gboolean * success, GError **error);
 
-gboolean songChanged(GObject *obj);
+/*gboolean songChanged(GObject *obj);*/
 
 #endif /* QUORRA_SQUEEZESLAVE_OBJECT_H_ */
