@@ -1,5 +1,5 @@
-QuorraSqueezeSlave.o: QuorraSqueezeSlave.c QuorraSqueezeSlave.h \
- /usr/include/stdlib.h /usr/include/features.h /usr/include/stdc-predef.h \
+SqueezeServer.o: SqueezeServer.c SqueezeServer.h /usr/include/stdlib.h \
+ /usr/include/features.h /usr/include/stdc-predef.h \
  /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h \
  /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.7.2/include/stddef.h \
@@ -86,8 +86,9 @@ QuorraSqueezeSlave.o: QuorraSqueezeSlave.c QuorraSqueezeSlave.h \
  /usr/include/glib-2.0/glib/deprecated/grel.h \
  /usr/include/glib-2.0/glib/deprecated/gthread.h /usr/include/pthread.h \
  /usr/include/sched.h /usr/include/bits/sched.h \
- /usr/include/bits/setjmp.h /usr/include/dbus-1.0/dbus/dbus-glib.h \
- /usr/include/glib-2.0/glib-object.h \
+ /usr/include/bits/setjmp.h /usr/include/glib-2.0/gio/gio.h \
+ /usr/include/glib-2.0/gio/giotypes.h \
+ /usr/include/glib-2.0/gio/gioenums.h /usr/include/glib-2.0/glib-object.h \
  /usr/include/glib-2.0/gobject/gbinding.h \
  /usr/include/glib-2.0/gobject/gobject.h \
  /usr/include/glib-2.0/gobject/gtype.h \
@@ -105,12 +106,7 @@ QuorraSqueezeSlave.o: QuorraSqueezeSlave.c QuorraSqueezeSlave.h \
  /usr/include/glib-2.0/gobject/gtypeplugin.h \
  /usr/include/glib-2.0/gobject/gvaluearray.h \
  /usr/include/glib-2.0/gobject/gvaluetypes.h \
- /usr/include/dbus-1.0/dbus/dbus-shared.h \
- /usr/include/dbus-1.0/dbus/dbus-gtype-specialized.h \
- /usr/include/dbus-1.0/dbus/dbus-gvalue-parse-variant.h \
- /usr/include/dbus-1.0/dbus/dbus-glib-bindings.h \
- /usr/include/glib-2.0/gio/gio.h /usr/include/glib-2.0/gio/giotypes.h \
- /usr/include/glib-2.0/gio/gioenums.h /usr/include/glib-2.0/gio/gaction.h \
+ /usr/include/glib-2.0/gio/gaction.h \
  /usr/include/glib-2.0/gio/gactiongroup.h \
  /usr/include/glib-2.0/gio/gactiongroupexporter.h \
  /usr/include/glib-2.0/gio/gactionmap.h \
@@ -248,9 +244,9 @@ QuorraSqueezeSlave.o: QuorraSqueezeSlave.c QuorraSqueezeSlave.h \
  /usr/include/asm-generic/socket.h /usr/include/asm/sockios.h \
  /usr/include/asm-generic/sockios.h /usr/include/bits/in.h \
  /usr/include/rpc/netdb.h /usr/include/bits/netdb.h \
- QuorraSqueezeSlaveObject.h QuorraSqueezeSlaveGlue.h SqueezeServer.h
+ QuorraSqueezeSlaveObject.h
 
-QuorraSqueezeSlave.h:
+SqueezeServer.h:
 
 /usr/include/stdlib.h:
 
@@ -498,7 +494,11 @@ QuorraSqueezeSlave.h:
 
 /usr/include/bits/setjmp.h:
 
-/usr/include/dbus-1.0/dbus/dbus-glib.h:
+/usr/include/glib-2.0/gio/gio.h:
+
+/usr/include/glib-2.0/gio/giotypes.h:
+
+/usr/include/glib-2.0/gio/gioenums.h:
 
 /usr/include/glib-2.0/glib-object.h:
 
@@ -535,20 +535,6 @@ QuorraSqueezeSlave.h:
 /usr/include/glib-2.0/gobject/gvaluearray.h:
 
 /usr/include/glib-2.0/gobject/gvaluetypes.h:
-
-/usr/include/dbus-1.0/dbus/dbus-shared.h:
-
-/usr/include/dbus-1.0/dbus/dbus-gtype-specialized.h:
-
-/usr/include/dbus-1.0/dbus/dbus-gvalue-parse-variant.h:
-
-/usr/include/dbus-1.0/dbus/dbus-glib-bindings.h:
-
-/usr/include/glib-2.0/gio/gio.h:
-
-/usr/include/glib-2.0/gio/giotypes.h:
-
-/usr/include/glib-2.0/gio/gioenums.h:
 
 /usr/include/glib-2.0/gio/gaction.h:
 
@@ -861,7 +847,3 @@ QuorraSqueezeSlave.h:
 /usr/include/bits/netdb.h:
 
 QuorraSqueezeSlaveObject.h:
-
-QuorraSqueezeSlaveGlue.h:
-
-SqueezeServer.h:

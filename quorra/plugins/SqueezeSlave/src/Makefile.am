@@ -5,4 +5,4 @@ AM_LDFLAGS =  $(GLIB_LIBS) -lgthread-2.0 -lglib-2.0 -ldbus-1 -lgobject-2.0 -ldbu
 # this lists the binaries to produce, the (non-PHONY, binary) targets in
 # the previous manual Makefile
 bin_PROGRAMS = quorra_plg_squeezeslave
-quorra_plg_squeezeslave_SOURCES = QuorraSqueezeSlave.c QuorraSqueezeSlave.h QuorraSqueezeSlaveObject.h QuorraSqueezeSlaveGlue.h
+quorra_plg_squeezeslave_SOURCES = SqueezeServer.c SqueezeServer.h QuorraSqueezeSlave.c QuorraSqueezeSlave.h QuorraSqueezeSlaveObject.h QuorraSqueezeSlaveGlue.h

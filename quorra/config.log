@@ -120,7 +120,7 @@ configure:3452: checking dependency style of gcc
 configure:3563: result: gcc3
 configure:3580: checking for library containing g_main_loop_run
 configure:3611: gcc -o conftest -g -O2   conftest.c  >&5
-/tmp/cci9gntg.o: In function `main':
+/tmp/ccFSGL5K.o: In function `main':
 /data/git/Quorra/quorra/conftest.c:22: undefined reference to `g_main_loop_run'
 collect2: error: ld returned 1 exit status
 configure:3611: $? = 1

@@ -1,5 +1,5 @@
 /*
- * QuorraSqueezeSlave.h
+ * SqueezeServer.h
  *
  * This file is part of Quorra.
  *
@@ -16,30 +16,27 @@
  * You should have received a copy of the GNU General Public License
  * along with com_mapfactory. If not, see <http://www.gnu.org/licenses/>.
  *
- * Created on 14 mars 2013
+ * Created on 20 mars 2013
  * By bozzo
  *
  **/
 
-#ifndef QUORRASQUEEZESLAVE_H_
-#define QUORRASQUEEZESLAVE_H_
+#ifndef SQUEEZESERVER_H_
+#define SQUEEZESERVER_H_
 
 #include <stdlib.h>
 #include <glib.h>
-#include <dbus/dbus-glib.h>
-#include <dbus/dbus-glib-bindings.h>
 #include <gio/gio.h>
 #include <netdb.h>
 
 #include "QuorraSqueezeSlaveObject.h"
-#include "QuorraSqueezeSlaveGlue.h"
-#include "SqueezeServer.h"
 
-#define QUORRA_SQUEEZESLAVE_PATH "/org/bozzo/Quorra/plg/QuorraSqueezeSlaveObject"
-#define QUORRA_SQUEEZESLAVE_SERVICE_NAME "org.bozzo.Quorra.plg.QuorraSqueezeSlaveObject"
+#define SQUEEZE_DEFAULT_PORT 9090
 
+gboolean squeezeserver_connect(QuorraSqueezeSlaveObject * obj, gchar * host, gint port, GCancellable * cancellable, GError ** error);
 
-gpointer quorra_plugin_run(gpointer data);
+gboolean squeezeserver_close(QuorraSqueezeSlaveObject * obj, GError ** error);
 
+gchar * squeezeserver_execute(QuorraSqueezeSlaveObject * obj, gchar * cmd, GCancellable * cancellable, GError ** error);
 
-#endif /* QUORRASQUEEZESLAVE_H_ */
+#endif /* SQUEEZESERVER_H_ */
