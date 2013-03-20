@@ -48,7 +48,7 @@ static void quorra_squeezeslave_object_init (QuorraSqueezeSlaveObject * quorra_s
 	GError ** error = NULL;
 
 	dbus_g_object_type_install_info (QUORRA_SQUEEZESLAVEOBJ_TYPE,	&dbus_glib_quorra_squeezeslave_object_object_info);
-	if (! squeezeserver_connect(quorra_squeezeslave,"localhost",9090,NULL,error))
+	if (! squeezeserver_connect(quorra_squeezeslave,"millenium.bozzo.org",9090,NULL,error))
 	{
 		g_print("quorra_squeezeslave_object_init : connect failed!");
 	}
@@ -93,7 +93,7 @@ gboolean quorra_squeezeslave_nextsong(QuorraSqueezeSlaveObject * obj, gchar * na
 
 gboolean quorra_squeezeslave_pause(QuorraSqueezeSlaveObject * obj, gchar * name, gboolean * success, GError **error)
 {
-	if (squeezeserver_execute(obj,"pause",NULL,error))
+	if (squeezeserver_execute(obj,g_strconcat(name,"pause\n",NULL),NULL,error))
 	{
 		g_print("quorra_squeezeslave_pause : execute failed!");
 
