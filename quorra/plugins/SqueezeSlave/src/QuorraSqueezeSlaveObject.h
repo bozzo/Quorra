@@ -26,29 +26,47 @@
 
 #include <glib-object.h>
 
-typedef struct QuorraSqueezeSlaveObject QuorraSqueezeSlaveObject;
-typedef struct QuorraSqueezeSlaveObjectClass QuorraSqueezeSlaveObjectClass;
+typedef struct _QuorraSqueezeSlaveObject QuorraSqueezeSlaveObject;
+typedef struct _QuorraSqueezeSlaveObjectClass QuorraSqueezeSlaveObjectClass;
+typedef struct _QuorraSqueezeSlaveObjectPrivate QuorraSqueezeSlaveObjectPrivate;
+
+#define QUORRA_SQUEEZESLAVEOBJ_TYPE 				(quorra_squeezeslave_object_get_type ())
+#define QUORRA_SQUEEZESLAVEOBJ_CLASS(klass) 		(G_TYPE_CHECK_CLASS_CAST ((klass), QUORRA_SQUEEZESLAVEOBJ_TYPE, QuorraSqueezeSlaveObjectClass))
+#define QUORRA_SQUEEZESLAVEOBJ_GET_PRIVATE(obj) 	(G_TYPE_INSTANCE_GET_PRIVATE ((obj), QUORRA_SQUEEZESLAVEOBJ_TYPE, QuorraSqueezeSlaveObjectPrivate))
+
+#define QUORRA_SQUEEZESLAVEOBJ(obj)					(G_TYPE_CHECK_INSTANCE_CAST ((obj), QUORRA_SQUEEZESLAVEOBJ_TYPE, QuorraSqueezeSlaveObject))
+#define IS_QUORRA_SQUEEZESLAVEOBJ(obj)              (G_TYPE_CHECK_INSTANCE_TYPE ((obj), QUORRA_SQUEEZESLAVEOBJ_TYPE))
+#define IS_QUORRA_SQUEEZESLAVEOBJ_CLASS(klass)      (G_TYPE_CHECK_CLASS_TYPE ((klass), QUORRA_SQUEEZESLAVEOBJ_TYPE))
+#define QUORRA_SQUEEZESLAVEOBJ_GET_CLASS(obj)       (G_TYPE_INSTANCE_GET_CLASS ((obj), QUORRA_SQUEEZESLAVEOBJ_TYPE, QuorraSqueezeSlaveObjectClass))
+
+GType quorra_squeezeslave_object_get_type (void);
 
 GType quorra_squeezeslave_pause_get_type (void);
 GType quorra_squeezeslave_stop_get_type (void);
 GType quorra_squeezeslave_nextsong_get_type (void);
 
 
-struct QuorraSqueezeSlaveObject
+struct _QuorraSqueezeSlaveObjectPrivate
 {
-	GObject parent;
 	GSocket * actionner;
 	GSocket * listener;
 };
 
-struct QuorraSqueezeSlaveObjectClass
+struct _QuorraSqueezeSlaveObject
+{
+	GObject parent;
+
+	/*< private >*/
+	QuorraSqueezeSlaveObjectPrivate * priv;
+};
+
+struct _QuorraSqueezeSlaveObjectClass
 {
 	GObjectClass parent;
 };
 
-#define QUORRA_SQUEEZESLAVEOBJ_TYPE (quorra_squeezeslave_object_get_type ())
-#define QUORRA_SQUEEZESLAVEOBJ_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), QUORRA_TYPE, QuorraSqueezeSlaveObjectClass))*/
-
+GSocket * quorra_squeezeslave_object_getActionner(QuorraSqueezeSlaveObject * obj);
+void quorra_squeezeslave_object_setActionner(QuorraSqueezeSlaveObject * obj, GSocket * actionner);
 
 gboolean quorra_squeezeslave_pause(QuorraSqueezeSlaveObject * obj, gchar * name, gboolean * success, GError **error);
 gboolean quorra_squeezeslave_nextsong(QuorraSqueezeSlaveObject * obj, gchar * name, gint32 hops, gboolean * success, GError **error);

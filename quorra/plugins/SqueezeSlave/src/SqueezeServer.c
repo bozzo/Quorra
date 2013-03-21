@@ -29,9 +29,10 @@ gboolean squeezeserver_connect(QuorraSqueezeSlaveObject * obj, gchar * host, gin
 	GSocketAddressEnumerator *enumerator;
 	GSocketAddress  *address;
 	gboolean success = FALSE;
+	GSocket * socket;
 
 	g_print("quorra_squeezeslave_object_init : init socket\n");
-	obj->actionner = g_socket_new (G_SOCKET_FAMILY_IPV4, G_SOCKET_TYPE_STREAM, 0, error);
+	socket = g_socket_new (G_SOCKET_FAMILY_IPV4, G_SOCKET_TYPE_STREAM, 0, error);
 
 	g_print("quorra_squeezeslave_object_init : parse network address\n");
 	connectable = g_network_address_parse (g_strdup_printf ("%s:%d",host,port), SQUEEZE_DEFAULT_PORT, error);
@@ -46,7 +47,7 @@ gboolean squeezeserver_connect(QuorraSqueezeSlaveObject * obj, gchar * host, gin
 			(address = g_socket_address_enumerator_next (enumerator, cancellable, error)))
 	{
 		g_print("quorra_squeezeslave_object_init : connect\n");
-		if (! g_socket_connect (obj->actionner, address, cancellable, error))
+		if (! g_socket_connect (socket, address, cancellable, error))
 		{
 			g_print("quorra_squeezeslave_object_init : connect failed\n");
 			/*g_message ("Connection to failed: %s, trying next\n", (*error)->message);*/
@@ -64,6 +65,7 @@ gboolean squeezeserver_connect(QuorraSqueezeSlaveObject * obj, gchar * host, gin
 	g_print("quorra_squeezeslave_object_init : end\n");
 	if (success)
 	{
+		quorra_squeezeslave_object_setActionner(obj,socket);
 		return TRUE;
 	}
 	return FALSE;
@@ -71,7 +73,7 @@ gboolean squeezeserver_connect(QuorraSqueezeSlaveObject * obj, gchar * host, gin
 
 gboolean squeezeserver_close(QuorraSqueezeSlaveObject * obj, GError ** error)
 {
-	return g_socket_close(obj->actionner,error);
+	return g_socket_close(quorra_squeezeslave_object_getActionner(obj),error);
 }
 
 gchar * squeezeserver_execute(QuorraSqueezeSlaveObject * obj, gchar * cmd, GCancellable * cancellable, GError ** error)
@@ -81,8 +83,16 @@ gchar * squeezeserver_execute(QuorraSqueezeSlaveObject * obj, gchar * cmd, GCanc
 	gint32 i;
 	gchar ** tokens;
 
-	a = g_socket_send(obj->actionner,cmd,strlen(cmd)*sizeof(gchar),cancellable,error);
-	a = g_socket_receive(obj->actionner,buff,1024,cancellable,error);
+	GSocket * socket;
+
+	g_print("squeezeserver_execute : start\n");
+	socket = quorra_squeezeslave_object_getActionner(obj);
+
+	g_print("squeezeserver_execute : getactionner\n");
+	a = g_socket_send(socket,cmd,strlen(cmd)*sizeof(gchar),cancellable,error);
+	g_print("squeezeserver_execute : send\n");
+	a = g_socket_receive(socket,buff,1024,cancellable,error);
+	g_print("squeezeserver_execute : receive\n");
 
 	tokens = g_strsplit(buff," ",0);
 	for (i = 0; tokens[i] != NULL; i++)

@@ -29,6 +29,7 @@ G_DEFINE_TYPE(QuorraSqueezeSlaveObject, quorra_squeezeslave_object, G_TYPE_OBJEC
 
 static void quorra_squeezeslave_object_class_init (QuorraSqueezeSlaveObjectClass * quorra_squeezeslave_class)
 {
+	g_type_class_add_private (quorra_squeezeslave_class, sizeof (QuorraSqueezeSlaveObjectPrivate));
 	/*signalId = g_signal_new("songChanged",
 			G_OBJECT_CLASS_TYPE(quorra_squeezeslave_class),
 			G_SIGNAL_RUN_LAST,
@@ -46,11 +47,45 @@ static void quorra_squeezeslave_object_class_init (QuorraSqueezeSlaveObjectClass
 static void quorra_squeezeslave_object_init (QuorraSqueezeSlaveObject * quorra_squeezeslave)
 {
 	GError ** error = NULL;
+	QuorraSqueezeSlaveObjectPrivate * priv;
 
 	dbus_g_object_type_install_info (QUORRA_SQUEEZESLAVEOBJ_TYPE,	&dbus_glib_quorra_squeezeslave_object_object_info);
-	if (! squeezeserver_connect(quorra_squeezeslave,"millenium.bozzo.org",9090,NULL,error))
+
+	quorra_squeezeslave->priv = priv = QUORRA_SQUEEZESLAVEOBJ_GET_PRIVATE (quorra_squeezeslave);
+
+	if (! (squeezeserver_connect(quorra_squeezeslave,"localhost",9090,NULL,error)))
 	{
 		g_print("quorra_squeezeslave_object_init : connect failed!");
+	}
+	g_print("quorra_squeezeslave_object_init : socket: %p\n",quorra_squeezeslave->priv->actionner);
+}
+
+GSocket * quorra_squeezeslave_object_getActionner(QuorraSqueezeSlaveObject * obj)
+{
+	QuorraSqueezeSlaveObjectPrivate * priv;
+
+	g_print("quorra_squeezeslave_object_getActionner : get!");
+	priv = QUORRA_SQUEEZESLAVEOBJ_GET_PRIVATE (obj);
+	g_print("quorra_squeezeslave_object_getActionner : priv!");
+	if (priv)
+	{
+		g_print("quorra_squeezeslave_object_init : socket: %p\n",priv->actionner);
+		return priv->actionner;
+	}
+	g_print("quorra_squeezeslave_object_getActionner : failed!");
+	return NULL;
+}
+
+void quorra_squeezeslave_object_setActionner(QuorraSqueezeSlaveObject * obj, GSocket * actionner)
+{
+	QuorraSqueezeSlaveObjectPrivate * priv;
+
+	g_print("quorra_squeezeslave_object_getActionner : get!");
+	priv = QUORRA_SQUEEZESLAVEOBJ_GET_PRIVATE (obj);
+	g_print("quorra_squeezeslave_object_getActionner : priv!");
+	if (priv)
+	{
+		priv->actionner = actionner;
 	}
 }
 
@@ -63,6 +98,14 @@ static void quorra_squeezeslave_object_init (QuorraSqueezeSlaveObject * quorra_s
 
 gboolean quorra_squeezeslave_stop(QuorraSqueezeSlaveObject * obj, gchar * name, gint32 time, gboolean * success, GError **error)
 {
+	if (squeezeserver_execute(obj,g_strconcat(name," stop\n",NULL),NULL,error))
+	{
+		g_print("quorra_squeezeslave_pause : execute failed!");
+
+		*success = FALSE;
+		return FALSE;
+	}
+
 	if (! squeezeserver_close(obj,error))
 	{
 		g_print("quorra_squeezeslave_stop : close failed!");
@@ -78,7 +121,7 @@ gboolean quorra_squeezeslave_stop(QuorraSqueezeSlaveObject * obj, gchar * name, 
 
 gboolean quorra_squeezeslave_nextsong(QuorraSqueezeSlaveObject * obj, gchar * name, gint32 hops, gboolean * success, GError **error)
 {
-	if (squeezeserver_execute(obj,"nextsong",NULL,error))
+	if (squeezeserver_execute(obj,g_strdup_printf ("%s playlist index +%d",name,hops),NULL,error))
 	{
 		g_print("quorra_squeezeslave_nextsong : execute failed!");
 
@@ -93,7 +136,7 @@ gboolean quorra_squeezeslave_nextsong(QuorraSqueezeSlaveObject * obj, gchar * na
 
 gboolean quorra_squeezeslave_pause(QuorraSqueezeSlaveObject * obj, gchar * name, gboolean * success, GError **error)
 {
-	if (squeezeserver_execute(obj,g_strconcat(name,"pause\n",NULL),NULL,error))
+	if (squeezeserver_execute(obj,g_strconcat(name," pause\n",NULL),NULL,error))
 	{
 		g_print("quorra_squeezeslave_pause : execute failed!");
 
