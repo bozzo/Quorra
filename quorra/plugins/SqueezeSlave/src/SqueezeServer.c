@@ -65,7 +65,7 @@ gboolean squeezeserver_connect(QuorraSqueezeSlaveObject * obj, gchar * host, gin
 	g_print("quorra_squeezeslave_object_init : end\n");
 	if (success)
 	{
-		quorra_squeezeslave_object_setActionner(obj,socket);
+		quorra_squeezeslave_object_setSocket(obj,socket);
 		return TRUE;
 	}
 	return FALSE;
@@ -73,7 +73,7 @@ gboolean squeezeserver_connect(QuorraSqueezeSlaveObject * obj, gchar * host, gin
 
 gboolean squeezeserver_close(QuorraSqueezeSlaveObject * obj, GError ** error)
 {
-	return g_socket_close(quorra_squeezeslave_object_getActionner(obj),error);
+	return g_socket_close(quorra_squeezeslave_object_getSocket(obj),error);
 }
 
 gchar * squeezeserver_execute(QuorraSqueezeSlaveObject * obj, gchar * cmd, GCancellable * cancellable, GError ** error)
@@ -86,7 +86,7 @@ gchar * squeezeserver_execute(QuorraSqueezeSlaveObject * obj, gchar * cmd, GCanc
 	GSocket * socket;
 
 	g_print("squeezeserver_execute : start\n");
-	socket = quorra_squeezeslave_object_getActionner(obj);
+	socket = quorra_squeezeslave_object_getSocket(obj);
 
 	g_print("squeezeserver_execute : getactionner\n");
 	a = g_socket_send(socket,cmd,strlen(cmd)*sizeof(gchar),cancellable,error);

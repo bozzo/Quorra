@@ -23,7 +23,7 @@
 #include "QuorraSqueezeSlave.h"
 
 
-static guint signalId;
+/* static guint signalId; */
 
 G_DEFINE_TYPE(QuorraSqueezeSlaveObject, quorra_squeezeslave_object, G_TYPE_OBJECT)
 
@@ -53,14 +53,30 @@ static void quorra_squeezeslave_object_init (QuorraSqueezeSlaveObject * quorra_s
 
 	quorra_squeezeslave->priv = priv = QUORRA_SQUEEZESLAVEOBJ_GET_PRIVATE (quorra_squeezeslave);
 
-	if (! (squeezeserver_connect(quorra_squeezeslave,"localhost",9090,NULL,error)))
+	if (! (squeezeserver_connect(quorra_squeezeslave,"millenium.bozzo.org",9090,NULL,error)))
 	{
 		g_print("quorra_squeezeslave_object_init : connect failed!");
 	}
-	g_print("quorra_squeezeslave_object_init : socket: %p\n",quorra_squeezeslave->priv->actionner);
+	g_print("quorra_squeezeslave_object_init : socket: %p\n",quorra_squeezeslave->priv->socket);
+
+	quorra_squeezeslave->priv->channel = g_io_channel_unix_new(g_socket_get_fd(quorra_squeezeslave->priv->socket));
 }
 
-GSocket * quorra_squeezeslave_object_getActionner(QuorraSqueezeSlaveObject * obj)
+
+GIOChannel * quorra_squeezeslave_object_getChannel(QuorraSqueezeSlaveObject * obj)
+{
+	QuorraSqueezeSlaveObjectPrivate * priv;
+
+	priv = QUORRA_SQUEEZESLAVEOBJ_GET_PRIVATE (obj);
+
+	if (priv)
+	{
+		return priv->channel;
+	}
+	return NULL;
+}
+
+GSocket * quorra_squeezeslave_object_getSocket(QuorraSqueezeSlaveObject * obj)
 {
 	QuorraSqueezeSlaveObjectPrivate * priv;
 
@@ -69,14 +85,14 @@ GSocket * quorra_squeezeslave_object_getActionner(QuorraSqueezeSlaveObject * obj
 	g_print("quorra_squeezeslave_object_getActionner : priv!");
 	if (priv)
 	{
-		g_print("quorra_squeezeslave_object_init : socket: %p\n",priv->actionner);
-		return priv->actionner;
+		g_print("quorra_squeezeslave_object_init : socket: %p\n",priv->socket);
+		return priv->socket;
 	}
 	g_print("quorra_squeezeslave_object_getActionner : failed!");
 	return NULL;
 }
 
-void quorra_squeezeslave_object_setActionner(QuorraSqueezeSlaveObject * obj, GSocket * actionner)
+void quorra_squeezeslave_object_setSocket(QuorraSqueezeSlaveObject * obj, GSocket * socket)
 {
 	QuorraSqueezeSlaveObjectPrivate * priv;
 
@@ -85,8 +101,28 @@ void quorra_squeezeslave_object_setActionner(QuorraSqueezeSlaveObject * obj, GSo
 	g_print("quorra_squeezeslave_object_getActionner : priv!");
 	if (priv)
 	{
-		priv->actionner = actionner;
+		priv->socket = socket;
 	}
+}
+
+
+gboolean quorra_squeezeslave_object_listen_callback (GIOChannel * source, GIOCondition condition, gpointer data)
+{
+	gsize bytes_read;
+	gchar buff[1024];
+	static int count = 0;
+
+	do
+	{
+		g_io_channel_read_chars (source, buff, 1024, &bytes_read, NULL);
+		if (bytes_read)
+		{
+			g_print ("--> %s",buff);
+		}
+	}
+	while (bytes_read);
+
+	return TRUE;
 }
 
 /*gboolean song_changed(GObject *obj)
@@ -95,6 +131,21 @@ void quorra_squeezeslave_object_setActionner(QuorraSqueezeSlaveObject * obj, GSo
 	g_signal_emit(obj, signalId, 0, 1);
 	return TRUE;
 }*/
+
+gboolean quorra_squeezeslave_listen(QuorraSqueezeSlaveObject * obj, gboolean * success, GError **error)
+{
+	if (squeezeserver_execute(obj,"listen 1\n",NULL,error))
+	{
+		g_print("quorra_squeezeslave_pause : execute failed!");
+
+		*success = FALSE;
+		return FALSE;
+	}
+
+	g_print ("quorra_squeezeslave_listen\n");
+	*success = TRUE;
+	return TRUE;
+}
 
 gboolean quorra_squeezeslave_stop(QuorraSqueezeSlaveObject * obj, gchar * name, gint32 time, gboolean * success, GError **error)
 {
@@ -164,6 +215,8 @@ gpointer quorra_plugin_run(gpointer data)
 	DBusGProxy *driver_proxy;
 	guint32 request_name_ret;
 	GMainLoop * loop;
+	GIOChannel * channel;
+	gboolean success;
 
 	g_type_init();
 
@@ -214,9 +267,21 @@ gpointer quorra_plugin_run(gpointer data)
 
 	/* Envoi du signal toutes les secondes */
 	//g_timeout_add (1000, (GSourceFunc)song_changed, obj);
+	if (! (channel = quorra_squeezeslave_object_getChannel(obj)))
+	{
+		g_error ("Error getting channel");
+		exit (1);
+	}
+	g_io_add_watch(channel, G_IO_IN | G_IO_ERR | G_IO_HUP, quorra_squeezeslave_object_listen_callback, NULL);
+
+	if (! quorra_squeezeslave_listen(obj, &success, &error))
+	{
+		g_error ("Error listen");
+	}
 
 	/* Si tout s’est bien déroulé, on attend les connections */
-	g_main_loop_run (loop);
+	g_main_loop_run(loop);
+
 	return NULL;
 }
 

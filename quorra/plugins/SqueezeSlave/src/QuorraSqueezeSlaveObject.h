@@ -48,8 +48,8 @@ GType quorra_squeezeslave_nextsong_get_type (void);
 
 struct _QuorraSqueezeSlaveObjectPrivate
 {
-	GSocket * actionner;
-	GSocket * listener;
+	GSocket * socket;
+	GIOChannel * channel;
 };
 
 struct _QuorraSqueezeSlaveObject
@@ -65,9 +65,14 @@ struct _QuorraSqueezeSlaveObjectClass
 	GObjectClass parent;
 };
 
-GSocket * quorra_squeezeslave_object_getActionner(QuorraSqueezeSlaveObject * obj);
-void quorra_squeezeslave_object_setActionner(QuorraSqueezeSlaveObject * obj, GSocket * actionner);
+GIOChannel * quorra_squeezeslave_object_getChannel(QuorraSqueezeSlaveObject * obj);
 
+GSocket * quorra_squeezeslave_object_getSocket(QuorraSqueezeSlaveObject * obj);
+void quorra_squeezeslave_object_setSocket(QuorraSqueezeSlaveObject * obj, GSocket * socket);
+
+gboolean quorra_squeezeslave_object_listen_callback (GIOChannel * source, GIOCondition condition, gpointer data);
+
+gboolean quorra_squeezeslave_listen(QuorraSqueezeSlaveObject * obj, gboolean * success, GError **error);
 gboolean quorra_squeezeslave_pause(QuorraSqueezeSlaveObject * obj, gchar * name, gboolean * success, GError **error);
 gboolean quorra_squeezeslave_nextsong(QuorraSqueezeSlaveObject * obj, gchar * name, gint32 hops, gboolean * success, GError **error);
 gboolean quorra_squeezeslave_stop(QuorraSqueezeSlaveObject * obj, gchar * name, gint32 time, gboolean * success, GError **error);
