@@ -48,18 +48,27 @@ static void quorra_squeezeslave_object_init (QuorraSqueezeSlaveObject * quorra_s
 {
 	GError ** error = NULL;
 	QuorraSqueezeSlaveObjectPrivate * priv;
+	int fd;
 
 	dbus_g_object_type_install_info (QUORRA_SQUEEZESLAVEOBJ_TYPE,	&dbus_glib_quorra_squeezeslave_object_object_info);
 
 	quorra_squeezeslave->priv = priv = QUORRA_SQUEEZESLAVEOBJ_GET_PRIVATE (quorra_squeezeslave);
+	quorra_squeezeslave->priv->socket = NULL;
+	quorra_squeezeslave->priv->channel = NULL;
 
 	if (! (squeezeserver_connect(quorra_squeezeslave,"millenium.bozzo.org",9090,NULL,error)))
 	{
 		g_print("quorra_squeezeslave_object_init : connect failed!");
+		return;
 	}
-	g_print("quorra_squeezeslave_object_init : socket: %p\n",quorra_squeezeslave->priv->socket);
 
-	quorra_squeezeslave->priv->channel = g_io_channel_unix_new(g_socket_get_fd(quorra_squeezeslave->priv->socket));
+	if (! (fd = g_socket_get_fd(quorra_squeezeslave->priv->socket)))
+	{
+		g_print("quorra_squeezeslave_object_init : get FD failed!");
+		return;
+	}
+
+	quorra_squeezeslave->priv->channel = g_io_channel_unix_new(fd);
 }
 
 
@@ -80,15 +89,11 @@ GSocket * quorra_squeezeslave_object_getSocket(QuorraSqueezeSlaveObject * obj)
 {
 	QuorraSqueezeSlaveObjectPrivate * priv;
 
-	g_print("quorra_squeezeslave_object_getActionner : get!");
 	priv = QUORRA_SQUEEZESLAVEOBJ_GET_PRIVATE (obj);
-	g_print("quorra_squeezeslave_object_getActionner : priv!");
 	if (priv)
 	{
-		g_print("quorra_squeezeslave_object_init : socket: %p\n",priv->socket);
 		return priv->socket;
 	}
-	g_print("quorra_squeezeslave_object_getActionner : failed!");
 	return NULL;
 }
 
@@ -96,9 +101,7 @@ void quorra_squeezeslave_object_setSocket(QuorraSqueezeSlaveObject * obj, GSocke
 {
 	QuorraSqueezeSlaveObjectPrivate * priv;
 
-	g_print("quorra_squeezeslave_object_getActionner : get!");
 	priv = QUORRA_SQUEEZESLAVEOBJ_GET_PRIVATE (obj);
-	g_print("quorra_squeezeslave_object_getActionner : priv!");
 	if (priv)
 	{
 		priv->socket = socket;
@@ -111,6 +114,12 @@ gboolean quorra_squeezeslave_object_listen_callback (GIOChannel * source, GIOCon
 	gsize bytes_read;
 	gchar buff[1024];
 	static int count = 0;
+
+	if (source == NULL)
+	{
+		g_print("quorra_squeezeslave_object_listen_callback : source is NULL!");
+		return FALSE;
+	}
 
 	do
 	{
@@ -142,7 +151,6 @@ gboolean quorra_squeezeslave_listen(QuorraSqueezeSlaveObject * obj, gboolean * s
 		return FALSE;
 	}
 
-	g_print ("quorra_squeezeslave_listen\n");
 	*success = TRUE;
 	return TRUE;
 }
@@ -259,7 +267,7 @@ gpointer quorra_plugin_run(gpointer data)
 	if (request_name_ret != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
 	{
 		g_error ("Got result code %u from requesting name", request_name_ret);
-		exit (1);
+		return NULL;
 	}
 
 	g_print ("GLib test service has name ‘%s’\n", QUORRA_SQUEEZESLAVE_SERVICE_NAME);
@@ -270,7 +278,7 @@ gpointer quorra_plugin_run(gpointer data)
 	if (! (channel = quorra_squeezeslave_object_getChannel(obj)))
 	{
 		g_error ("Error getting channel");
-		exit (1);
+		return NULL;
 	}
 	g_io_add_watch(channel, G_IO_IN | G_IO_ERR | G_IO_HUP, quorra_squeezeslave_object_listen_callback, NULL);
 

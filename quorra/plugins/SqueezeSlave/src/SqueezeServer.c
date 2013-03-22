@@ -31,38 +31,31 @@ gboolean squeezeserver_connect(QuorraSqueezeSlaveObject * obj, gchar * host, gin
 	gboolean success = FALSE;
 	GSocket * socket;
 
-	g_print("quorra_squeezeslave_object_init : init socket\n");
 	socket = g_socket_new (G_SOCKET_FAMILY_IPV4, G_SOCKET_TYPE_STREAM, 0, error);
 
-	g_print("quorra_squeezeslave_object_init : parse network address\n");
 	connectable = g_network_address_parse (g_strdup_printf ("%s:%d",host,port), SQUEEZE_DEFAULT_PORT, error);
 	if (connectable == NULL)
 	{
 		return FALSE;
 	}
 
-	g_print("quorra_squeezeslave_object_init : enumerate address\n");
 	enumerator = g_socket_connectable_enumerate (connectable);
 	while (!(success) &&
 			(address = g_socket_address_enumerator_next (enumerator, cancellable, error)))
 	{
-		g_print("quorra_squeezeslave_object_init : connect\n");
 		if (! g_socket_connect (socket, address, cancellable, error))
 		{
-			g_print("quorra_squeezeslave_object_init : connect failed\n");
 			/*g_message ("Connection to failed: %s, trying next\n", (*error)->message);*/
 			g_clear_error (error);
 		}
 		else
 		{
-			g_print("quorra_squeezeslave_object_init : connect success\n");
 			success = TRUE;
 		}
 		g_object_unref (address);
 	}
 	g_object_unref (enumerator);
 
-	g_print("quorra_squeezeslave_object_init : end\n");
 	if (success)
 	{
 		quorra_squeezeslave_object_setSocket(obj,socket);
@@ -85,14 +78,16 @@ gchar * squeezeserver_execute(QuorraSqueezeSlaveObject * obj, gchar * cmd, GCanc
 
 	GSocket * socket;
 
-	g_print("squeezeserver_execute : start\n");
 	socket = quorra_squeezeslave_object_getSocket(obj);
 
-	g_print("squeezeserver_execute : getactionner\n");
+	if (socket == NULL)
+	{
+		g_print("squeezeserver_execute : socket is NULL!");
+		return NULL;
+	}
+
 	a = g_socket_send(socket,cmd,strlen(cmd)*sizeof(gchar),cancellable,error);
-	g_print("squeezeserver_execute : send\n");
 	a = g_socket_receive(socket,buff,1024,cancellable,error);
-	g_print("squeezeserver_execute : receive\n");
 
 	tokens = g_strsplit(buff," ",0);
 	for (i = 0; tokens[i] != NULL; i++)
