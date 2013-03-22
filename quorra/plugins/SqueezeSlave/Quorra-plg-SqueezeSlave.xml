@@ -41,8 +41,9 @@ By bozzo
 			<arg type="i" name="time" direction="in" />
 			<arg type="b" name="success" direction="out" />
 		</method>
-		<!-- <signal name="songChanged">
-			<arg type="s" name="newSong" direction="out" />
-		</signal> -->
+		<signal name="songChanged">
+			<arg type="i" name="id" direction="out" />
+			<!-- <arg type="s" name="name" direction="out" /> -->
+		</signal>
 	</interface>
 </node>

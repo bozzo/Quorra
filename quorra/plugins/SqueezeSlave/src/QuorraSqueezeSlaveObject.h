@@ -65,18 +65,27 @@ struct _QuorraSqueezeSlaveObjectClass
 	GObjectClass parent;
 };
 
+/*
+ * Methods definition
+ */
 GIOChannel * quorra_squeezeslave_object_getChannel(QuorraSqueezeSlaveObject * obj);
-
 GSocket * quorra_squeezeslave_object_getSocket(QuorraSqueezeSlaveObject * obj);
 void quorra_squeezeslave_object_setSocket(QuorraSqueezeSlaveObject * obj, GSocket * socket);
+gboolean quorra_squeezeslave_action_playlist(QuorraSqueezeSlaveObject * obj, gchar ** cmd);
 
+/*
+ * Listen to socket
+ */
 gboolean quorra_squeezeslave_object_listen_callback (GIOChannel * source, GIOCondition condition, gpointer data);
-
 gboolean quorra_squeezeslave_listen(QuorraSqueezeSlaveObject * obj, gboolean * success, GError **error);
+
+/*
+ * DBus callback
+ */
 gboolean quorra_squeezeslave_pause(QuorraSqueezeSlaveObject * obj, gchar * name, gboolean * success, GError **error);
 gboolean quorra_squeezeslave_nextsong(QuorraSqueezeSlaveObject * obj, gchar * name, gint32 hops, gboolean * success, GError **error);
 gboolean quorra_squeezeslave_stop(QuorraSqueezeSlaveObject * obj, gchar * name, gint32 time, gboolean * success, GError **error);
 
-/*gboolean songChanged(GObject *obj);*/
+gboolean songChanged(GObject *obj,gint id, gchar * name);
 
 #endif /* QUORRA_SQUEEZESLAVE_OBJECT_H_ */

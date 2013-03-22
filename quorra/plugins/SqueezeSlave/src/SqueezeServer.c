@@ -36,6 +36,7 @@ gboolean squeezeserver_connect(QuorraSqueezeSlaveObject * obj, gchar * host, gin
 	connectable = g_network_address_parse (g_strdup_printf ("%s:%d",host,port), SQUEEZE_DEFAULT_PORT, error);
 	if (connectable == NULL)
 	{
+		g_error("Unable to parse network address!");
 		return FALSE;
 	}
 
@@ -82,7 +83,7 @@ gchar * squeezeserver_execute(QuorraSqueezeSlaveObject * obj, gchar * cmd, GCanc
 
 	if (socket == NULL)
 	{
-		g_print("squeezeserver_execute : socket is NULL!");
+		g_error("squeezeserver_execute : socket is NULL!");
 		return NULL;
 	}
 
