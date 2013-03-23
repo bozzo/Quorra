@@ -116,7 +116,7 @@ gboolean quorra_squeezeslave_action_playlist(QuorraSqueezeSlaveObject * obj, gch
 		g_error("quorra_squeezeslave_action_playlist : cmd is NULL!");
 		return FALSE;
 	}
-	songChanged(obj);
+	songChanged(obj,1,"test");
 
 
 	return TRUE;

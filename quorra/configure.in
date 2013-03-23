@@ -1,8 +1,9 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ([2.69])
+AC_PREREQ([2.68])
 AC_INIT(quorra, 0.0.1, bozzo@bozzo.org)
+LT_INIT
 AM_INIT_AUTOMAKE(quorra, 0.0.1)
 #AC_CONFIG_SRCDIR([DummyObject.h])
 AC_CONFIG_HEADERS([config.h])
@@ -15,6 +16,8 @@ AC_SUBST(GLIB_LIBS)
 AC_SUBST(GLIB_CFLAGS)
 
 # Checks for libraries.
+LTLIBOBJS=`echo "$LIBOBJS" | sed 's/\.[^.]* /.lo /g;s/\.[^.]*$/.lo/'`
+AC_SUBST([LTLIBOBJS])
 
 # Checks for header files.
 AC_CHECK_HEADER([dbus/dbus-glib-bindings.h])
