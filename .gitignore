@@ -34,6 +34,7 @@ m4
 libtool
 *.o
 *.la
+*.lai
 *.so*
 *.a
 .deps
@@ -44,5 +45,6 @@ libtool
 *.gcda
 app.info
 coverage_report
-
+.libs
+.deps
 
