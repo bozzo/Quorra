@@ -116,7 +116,7 @@ gboolean quorra_squeezeslave_action_playlist(QuorraSqueezeSlaveObject * obj, gch
 		g_error("quorra_squeezeslave_action_playlist : cmd is NULL!");
 		return FALSE;
 	}
-	songChanged(obj,1,"test");
+	songChanged((GObject *)obj,1,"test");
 
 
 	return TRUE;
@@ -127,7 +127,6 @@ gboolean quorra_squeezeslave_object_listen_callback (GIOChannel * source, GIOCon
 {
 	gsize bytes_read;
 	gchar buff[1024];
-	static int count = 0;
 	gint i;
 	gchar ** tokens;
 	gchar * tmp;
@@ -318,14 +317,14 @@ gpointer quorra_plugin_run(gpointer data)
 
 	/* Envoi du signal toutes les secondes */
 	/*g_timeout_add (1000, (GSourceFunc)songChanged, obj);*/
-	if (! (channel = quorra_squeezeslave_object_getChannel(obj)))
+	if (! (channel = quorra_squeezeslave_object_getChannel((QuorraSqueezeSlaveObject *)obj)))
 	{
 		g_error ("Error getting channel");
 		return NULL;
 	}
 	g_io_add_watch(channel, G_IO_IN | G_IO_ERR | G_IO_HUP, quorra_squeezeslave_object_listen_callback, obj);
 
-	if (! quorra_squeezeslave_listen(obj, &success, &error))
+	if (! quorra_squeezeslave_listen((QuorraSqueezeSlaveObject *)obj, &success, &error))
 	{
 		g_error("Error listen");
 	}

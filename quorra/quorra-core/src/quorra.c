@@ -20,13 +20,8 @@
  * By bozzo
  *
  **/
-#include <gmodule.h>
-#include <glib.h>
+#include "quorra.h"
 
-#define QUORRA_PLUGIN_METHOD "quorra_plugin_run"
-#define QUORRA_CONFIG_FILE "/etc/quorra/quorra.conf"
-
-typedef gpointer (* quorra_plugin) (gpointer data);
 
 GKeyFile * load_config(GError ** error)
 {
@@ -34,7 +29,7 @@ GKeyFile * load_config(GError ** error)
 
     keyfile = g_key_file_new();
     
-    if (! g_key_file_load_from_file(keyfile,QUORRA_CONFIG_FILE,G_KEY_FILE_NONE,error))
+    if (! g_key_file_load_from_file(keyfile,config_file,G_KEY_FILE_NONE,error))
     {
 	g_error("Error while loading config from file. ");	
 	return NULL;
@@ -42,23 +37,41 @@ GKeyFile * load_config(GError ** error)
     return keyfile;
 }
 
+void quorra_log_handler (const gchar *log_domain, GLogLevelFlags log_level, const gchar *message, gpointer user_data)
+{
+    g_printerr("--> %s\n",message);
+}
+
 int main (int argc, char *argv[])
 {
-    gchar *filename;/* = "/home/bozzo/git/Quorra/quorra/plugins/SqueezeSlave/src/plg_squeezeslave-1.0.la";*/
-    GError **error;
+    gchar *filename;
     GKeyFile * keyfile;
 
-    keyfile = load_config(error);
-    filename = g_key_file_get_string (keyfile,"core","plugin",NULL);
+    GError * error = NULL;
+    GOptionContext *context;
 
     quorra_plugin  say_hello;
     GModule      *module;
+
+    context = g_option_context_new ("- test tree model performance");
+    g_option_context_add_main_entries (context, entries, NULL);
+    /*g_option_context_add_group (context, gtk_get_option_group (TRUE));*/
+    if (!g_option_context_parse (context, &argc, &argv, &error))
+    {
+        g_print ("option parsing failed: %s\n", error->message);
+        return 1;
+    }
+
+    g_log_set_handler (QUORRA_LOG_DOMAIN, G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION, quorra_log_handler, NULL);
+
+    keyfile = load_config(&error);
+    filename = g_key_file_get_string (keyfile,"core","plugin",NULL);
 
     module = g_module_open (filename, G_MODULE_BIND_LAZY);
     if (!module)
     {
 	g_error ("%s", g_module_error ());
-	return FALSE;
+	return 1;
     }
 
     if (!g_module_symbol (module, QUORRA_PLUGIN_METHOD, (gpointer *)&say_hello))
@@ -68,7 +81,7 @@ int main (int argc, char *argv[])
         {
 	    g_warning ("%s: %s", filename, g_module_error ());
 	}
-	return FALSE;
+	return 1;
     }
 
     if (say_hello == NULL)
@@ -78,7 +91,7 @@ int main (int argc, char *argv[])
         {
 	    g_warning ("%s: %s", filename, g_module_error ());
         }
-	return FALSE;
+	return 1;
     }
 
   /* call our function in the module */

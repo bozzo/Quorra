@@ -83,13 +83,24 @@ gchar * squeezeserver_execute(QuorraSqueezeSlaveObject * obj, gchar * cmd, GCanc
 
 	if (socket == NULL)
 	{
-		g_error("squeezeserver_execute : socket is NULL!");
-		return NULL;
+	    g_error("squeezeserver_execute : socket is NULL!");
+	    return NULL;
 	}
 
-	a = g_socket_send(socket,cmd,strlen(cmd)*sizeof(gchar),cancellable,error);
-	a = g_socket_receive(socket,buff,1024,cancellable,error);
+	a = g_socket_send(socket,cmd,g_strlen(cmd)*sizeof(gchar),cancellable,error);
+	if (a < 0)
+	{
+	    g_error("squeezeserver_execute : error on send command!");
+            return NULL;
+	}
 
+	a = g_socket_receive(socket,buff,1024,cancellable,error);
+        if (a < 0)
+        {
+            g_error("squeezeserver_execute : error on receive command result!");
+            return NULL;
+        }
+	
 	tokens = g_strsplit(buff," ",0);
 	for (i = 0; tokens[i] != NULL; i++)
 	{
