@@ -49,4 +49,4 @@ coverage_report
 .libs
 .deps
 
-quorra
+/quorra/quorra-core/src/quorra
