@@ -49,4 +49,12 @@ coverage_report
 .libs
 .deps
 
+/quorra/config.guess
+/quorra/config.h
+/quorra/config.sub
+/quorra/depcomp
+/quorra/install-sh
+/quorra/ltmain.sh
+/quorra/missing
+
 /quorra/quorra-core/src/quorra
