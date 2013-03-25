@@ -25,6 +25,8 @@
 #define SQUEEZESERVER_H_
 
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include <glib.h>
 #include <gio/gio.h>
 #include <netdb.h>

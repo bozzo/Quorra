@@ -87,7 +87,7 @@ gchar * squeezeserver_execute(QuorraSqueezeSlaveObject * obj, gchar * cmd, GCanc
 	    return NULL;
 	}
 
-	a = g_socket_send(socket,cmd,g_strlen(cmd)*sizeof(gchar),cancellable,error);
+	a = g_socket_send(socket,cmd,strlen(cmd)*sizeof(gchar),cancellable,error);
 	if (a < 0)
 	{
 	    g_error("squeezeserver_execute : error on send command!");

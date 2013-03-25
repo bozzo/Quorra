@@ -7,6 +7,7 @@ LT_INIT
 AM_INIT_AUTOMAKE(quorra, 0.0.1)
 #AC_CONFIG_SRCDIR([DummyObject.h])
 AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_MACRO_DIR([m4])
 
 # Checks for programs.
 AC_PROG_CC

@@ -12,8 +12,35 @@
 				value="pause" />
 			<arg type="b" name="success" direction="out" />
 		</method>
-		<signal name="videoStarted">
-			<arg type="s" name="name" direction="out" />
+		<signal name="PlayerOnPlay">
+			<arg type="s" name="sender" direction="out" />
+		</signal>
+		<signal name="PlayerOnPause">
+			<arg type="s" name="sender" direction="out" />
+		</signal>
+		<signal name="PlayerOnStop">
+			<arg type="s" name="sender" direction="out" />
+		</signal>
+		<signal name="PlayerOnSeek">
+			<arg type="s" name="sender" direction="out" />
+		</signal>
+		<signal name="PlaylistOnClear">
+			<arg type="s" name="sender" direction="out" />
+		</signal>
+		<signal name="PlaylistOnAdd">
+			<arg type="s" name="sender" direction="out" />
+		</signal>
+		<signal name="SystemOnQuit">
+			<arg type="s" name="sender" direction="out" />
+		</signal>
+		<signal name="VideoLibraryOnUpdate">
+			<arg type="s" name="sender" direction="out" />
+		</signal>
+		<signal name="GUIOnScreensaverDeactivated">
+			<arg type="s" name="sender" direction="out" />
+		</signal>
+		<signal name="GUIOnScreensaverActivated">
+			<arg type="s" name="sender" direction="out" />
 		</signal>
 	</interface>
 </node>

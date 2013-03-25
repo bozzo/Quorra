@@ -24,12 +24,15 @@
 #ifndef QUORRASQUEEZESLAVE_H_
 #define QUORRASQUEEZESLAVE_H_
 
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <glib.h>
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-bindings.h>
 #include <gio/gio.h>
 #include <netdb.h>
+#include <glib/gprintf.h>
 
 #include "QuorraSqueezeSlaveObject.h"
 #include "QuorraSqueezeSlaveGlue.h"
