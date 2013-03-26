@@ -9,5 +9,5 @@ ACLOCAL_AMFLAGS = -I m4
 #bin_PROGRAMS = quorra_plg_squeezeslave
 #quorra_plg_squeezeslave_SOURCES = SqueezeServer.c SqueezeServer.h QuorraSqueezeSlave.c QuorraSqueezeSlave.h QuorraSqueezeSlaveObject.h QuorraSqueezeSlaveGlue.h
 lib_LTLIBRARIES = plg_xbmc-1.0.la
-plg_xbmc_1_0_la_SOURCES = QuorraXbmcGlue.h
+plg_xbmc_1_0_la_SOURCES = QuorraXbmcGlue.h Xbmc.c Xbmc.h QuorraXbmcObject.h QuorraXbmcObject.c
 plg_xbmc_1_0_la_LDFLAGS = -module

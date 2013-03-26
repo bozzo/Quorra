@@ -1,5 +1,5 @@
 /*
- * QuorraSqueezeSlave.h
+ * Xbmc.h
  *
  * This file is part of Quorra.
  *
@@ -16,33 +16,23 @@
  * You should have received a copy of the GNU General Public License
  * along with Quorra. If not, see <http://www.gnu.org/licenses/>.
  *
- * Created on 14 mars 2013
+ * Created on 26 mars 2013
  * By bozzo
  *
  **/
 
-#ifndef QUORRASQUEEZESLAVE_H_
-#define QUORRASQUEEZESLAVE_H_
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <glib.h>
-#include <dbus/dbus-glib.h>
-#include <dbus/dbus-glib-bindings.h>
-#include <gio/gio.h>
-#include <netdb.h>
-#include <glib/gprintf.h>
-
-#include "QuorraSqueezeSlaveObject.h"
-#include "QuorraSqueezeSlaveGlue.h"
-#include "SqueezeServer.h"
-
-#define QUORRA_SQUEEZESLAVE_PATH "/org/bozzo/Quorra/plg/QuorraSqueezeSlaveObject"
-#define QUORRA_SQUEEZESLAVE_SERVICE_NAME "org.bozzo.Quorra.plg.QuorraSqueezeSlaveObject"
+#ifndef XBMC_H_
+#define XBMC_H_
 
 
-gpointer quorra_plugin_run(gpointer data);
+#define XBMC_DEFAULT_PORT 9090
+
+gboolean xbmc_connect(QuorraSqueezeSlaveObject * obj, gchar * host, gint port, GCancellable * cancellable, GError ** error);
+
+gboolean xbmc_close(QuorraSqueezeSlaveObject * obj, GError ** error);
+
+gchar * xbmc_execute(QuorraSqueezeSlaveObject * obj, gchar * cmd, GCancellable * cancellable, GError ** error);
 
 
-#endif /* QUORRASQUEEZESLAVE_H_ */
+
+#endif /* XBMC_H_ */

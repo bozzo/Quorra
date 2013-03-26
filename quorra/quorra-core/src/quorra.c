@@ -14,7 +14,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with com_mapfactory. If not, see <http://www.gnu.org/licenses/>.
+ * along with Quorra. If not, see <http://www.gnu.org/licenses/>.
  *
  * Created on 18 mars 2013
  * By bozzo

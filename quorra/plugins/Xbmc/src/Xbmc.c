@@ -1,5 +1,5 @@
 /*
- * QuorraSqueezeSlave.h
+ * Xbmc.c
  *
  * This file is part of Quorra.
  *
@@ -16,33 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with Quorra. If not, see <http://www.gnu.org/licenses/>.
  *
- * Created on 14 mars 2013
+ * Created on 26 mars 2013
  * By bozzo
  *
  **/
 
-#ifndef QUORRASQUEEZESLAVE_H_
-#define QUORRASQUEEZESLAVE_H_
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <glib.h>
-#include <dbus/dbus-glib.h>
-#include <dbus/dbus-glib-bindings.h>
-#include <gio/gio.h>
-#include <netdb.h>
-#include <glib/gprintf.h>
-
-#include "QuorraSqueezeSlaveObject.h"
-#include "QuorraSqueezeSlaveGlue.h"
-#include "SqueezeServer.h"
-
-#define QUORRA_SQUEEZESLAVE_PATH "/org/bozzo/Quorra/plg/QuorraSqueezeSlaveObject"
-#define QUORRA_SQUEEZESLAVE_SERVICE_NAME "org.bozzo.Quorra.plg.QuorraSqueezeSlaveObject"
-
-
-gpointer quorra_plugin_run(gpointer data);
-
-
-#endif /* QUORRASQUEEZESLAVE_H_ */
+#include "Xbmc.h"

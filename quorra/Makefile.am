@@ -1,2 +1,4 @@
 AUTOMAKE_OPTIONS = foreign
-SUBDIRS = plugins/SqueezeSlave/src quorra-core/src
+SUBDIRS = 	plugins/SqueezeSlave/src \
+			plugins/Xbmc/src \
+			quorra-core/src
