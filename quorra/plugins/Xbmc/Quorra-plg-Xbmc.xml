@@ -3,13 +3,13 @@
 	<interface name="org.bozzo.quorra.plg.XbmcInterface">
 		<annotation name="org.freedesktop.DBus.GLib.CSymbol" value="quorra_plg_xbmc_interface" />
 		<method name="Stop">
-			<annotation name="org.freedesktop.DBus.GLib.CSymbol" value="stop" />
-			<arg type="s" name="playerid" direction="in" />
+			<annotation name="org.freedesktop.DBus.GLib.CSymbol" value="quorra_xbmc_stop" />
+			<arg type="i" name="playerid" direction="in" />
 			<arg type="b" name="success" direction="out" />
 		</method>
 		<method name="PlayPause">
-			<annotation name="org.freedesktop.DBus.GLib.CSymbol" value="playpause" />
-			<arg type="s" name="playerid" direction="in" />
+			<annotation name="org.freedesktop.DBus.GLib.CSymbol" value="quorra_xbmc_playpause" />
+			<arg type="i" name="playerid" direction="in" />
 			<arg type="b" name="success" direction="out" />
 		</method>
 		<signal name="PlayerOnPlay">

@@ -24,56 +24,6 @@
 #include "QuorraXbmcObject.h"
 
 
-/*static guint signalId;*/
-
-G_DEFINE_TYPE(QuorraXbmcObject, quorra_xbmc_object, G_TYPE_OBJECT)
-
-static void quorra_xbmc_object_class_init (QuorraXbmcObjectClass * quorra_squeezeslave_class)
-{
-	g_type_class_add_private (quorra_squeezeslave_class, sizeof (QuorraXbmcObjectPrivate));
-
-	/*signalId = g_signal_new("song_changed",
-			G_OBJECT_CLASS_TYPE(quorra_squeezeslave_class),
-			G_SIGNAL_RUN_LAST,
-			0,
-			NULL,
-			NULL,
-			g_cclosure_marshal_VOID__INT,
-			G_TYPE_NONE,
-			1,
-			G_TYPE_INT);
-
-	g_print("dummy_object_class_init : signalId = %d\n", signalId);*/
-}
-
-static void quorra_xbmc_object_init (QuorraXbmcObject * quorra_xbmc)
-{
-	GError ** error = NULL;
-	QuorraXbmcObjectPrivate * priv;
-	int fd;
-
-	dbus_g_object_type_install_info (QUORRA_XBMCOBJ_TYPE,	&dbus_glib_quorra_xbmc_object_object_info);
-
-	quorra_xbmc->priv = priv = QUORRA_XBMCOBJ_GET_PRIVATE (quorra_xbmc);
-	quorra_xbmc->priv->socket = NULL;
-	quorra_xbmc->priv->channel = NULL;
-
-	if (! (squeezeserver_connect(quorra_xbmc,"r4.bozzo.org",9090,NULL,error)))
-	{
-		g_error("quorra_xbmc_object_init : connect failed!");
-		return;
-	}
-
-	if (! (fd = g_socket_get_fd(quorra_xbmc->priv->socket)))
-	{
-		g_error("quorra_xbmc_object_init : get FD failed!");
-		return;
-	}
-
-	quorra_xbmc->priv->channel = g_io_channel_unix_new(fd);
-}
-
-
 GIOChannel * quorra_xbmc_object_getChannel(QuorraXbmcObject * obj)
 {
 	QuorraXbmcObjectPrivate * priv;

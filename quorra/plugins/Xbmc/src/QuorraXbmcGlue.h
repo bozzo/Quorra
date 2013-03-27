@@ -55,32 +55,33 @@ G_BEGIN_DECLS
 #endif /* !G_ENABLE_DEBUG */
 
 
-/* BOOLEAN:POINTER,POINTER */
-extern void dbus_glib_marshal_quorra_xbmc_object_BOOLEAN__POINTER_POINTER (GClosure     *closure,
-                                                                           GValue       *return_value,
-                                                                           guint         n_param_values,
-                                                                           const GValue *param_values,
-                                                                           gpointer      invocation_hint,
-                                                                           gpointer      marshal_data);
+/* BOOLEAN:INT,POINTER,POINTER */
+extern void dbus_glib_marshal_quorra_xbmc_object_BOOLEAN__INT_POINTER_POINTER (GClosure     *closure,
+                                                                               GValue       *return_value,
+                                                                               guint         n_param_values,
+                                                                               const GValue *param_values,
+                                                                               gpointer      invocation_hint,
+                                                                               gpointer      marshal_data);
 void
-dbus_glib_marshal_quorra_xbmc_object_BOOLEAN__POINTER_POINTER (GClosure     *closure,
-                                                               GValue       *return_value G_GNUC_UNUSED,
-                                                               guint         n_param_values,
-                                                               const GValue *param_values,
-                                                               gpointer      invocation_hint G_GNUC_UNUSED,
-                                                               gpointer      marshal_data)
+dbus_glib_marshal_quorra_xbmc_object_BOOLEAN__INT_POINTER_POINTER (GClosure     *closure,
+                                                                   GValue       *return_value G_GNUC_UNUSED,
+                                                                   guint         n_param_values,
+                                                                   const GValue *param_values,
+                                                                   gpointer      invocation_hint G_GNUC_UNUSED,
+                                                                   gpointer      marshal_data)
 {
-  typedef gboolean (*GMarshalFunc_BOOLEAN__POINTER_POINTER) (gpointer     data1,
-                                                             gpointer     arg_1,
-                                                             gpointer     arg_2,
-                                                             gpointer     data2);
-  register GMarshalFunc_BOOLEAN__POINTER_POINTER callback;
+  typedef gboolean (*GMarshalFunc_BOOLEAN__INT_POINTER_POINTER) (gpointer     data1,
+                                                                 gint         arg_1,
+                                                                 gpointer     arg_2,
+                                                                 gpointer     arg_3,
+                                                                 gpointer     data2);
+  register GMarshalFunc_BOOLEAN__INT_POINTER_POINTER callback;
   register GCClosure *cc = (GCClosure*) closure;
   register gpointer data1, data2;
   gboolean v_return;
 
   g_return_if_fail (return_value != NULL);
-  g_return_if_fail (n_param_values == 3);
+  g_return_if_fail (n_param_values == 4);
 
   if (G_CCLOSURE_SWAP_DATA (closure))
     {
@@ -92,11 +93,12 @@ dbus_glib_marshal_quorra_xbmc_object_BOOLEAN__POINTER_POINTER (GClosure     *clo
       data1 = g_value_peek_pointer (param_values + 0);
       data2 = closure->data;
     }
-  callback = (GMarshalFunc_BOOLEAN__POINTER_POINTER) (marshal_data ? marshal_data : cc->callback);
+  callback = (GMarshalFunc_BOOLEAN__INT_POINTER_POINTER) (marshal_data ? marshal_data : cc->callback);
 
   v_return = callback (data1,
-                       g_marshal_value_peek_pointer (param_values + 1),
+                       g_marshal_value_peek_int (param_values + 1),
                        g_marshal_value_peek_pointer (param_values + 2),
+                       g_marshal_value_peek_pointer (param_values + 3),
                        data2);
 
   g_value_set_boolean (return_value, v_return);
@@ -108,14 +110,14 @@ G_END_DECLS
 
 #include <dbus/dbus-glib.h>
 static const DBusGMethodInfo dbus_glib_quorra_xbmc_object_methods[] = {
-  { (GCallback) stop, dbus_glib_marshal_quorra_xbmc_object_BOOLEAN__POINTER_POINTER, 0 },
-  { (GCallback) pause, dbus_glib_marshal_quorra_xbmc_object_BOOLEAN__POINTER_POINTER, 59 },
+  { (GCallback) quorra_xbmc_stop, dbus_glib_marshal_quorra_xbmc_object_BOOLEAN__INT_POINTER_POINTER, 0 },
+  { (GCallback) quorra_xbmc_playpause, dbus_glib_marshal_quorra_xbmc_object_BOOLEAN__INT_POINTER_POINTER, 72 },
 };
 
 const DBusGObjectInfo dbus_glib_quorra_xbmc_object_object_info = {  1,
   dbus_glib_quorra_xbmc_object_methods,
   2,
-"org.bozzo.quorra.plg.XbmcInterface\0Stop\0S\0success\0O\0F\0N\0b\0\0org.bozzo.quorra.plg.XbmcInterface\0Pause\0S\0success\0O\0F\0N\0b\0\0\0",
+"org.bozzo.quorra.plg.XbmcInterface\0Stop\0S\0playerid\0I\0i\0success\0O\0F\0N\0b\0\0org.bozzo.quorra.plg.XbmcInterface\0PlayPause\0S\0playerid\0I\0i\0success\0O\0F\0N\0b\0\0\0",
 "org.bozzo.quorra.plg.XbmcInterface\0PlayerOnPlay\0org.bozzo.quorra.plg.XbmcInterface\0PlayerOnPause\0org.bozzo.quorra.plg.XbmcInterface\0PlayerOnStop\0org.bozzo.quorra.plg.XbmcInterface\0PlayerOnSeek\0org.bozzo.quorra.plg.XbmcInterface\0PlaylistOnClear\0org.bozzo.quorra.plg.XbmcInterface\0PlaylistOnAdd\0org.bozzo.quorra.plg.XbmcInterface\0SystemOnQuit\0org.bozzo.quorra.plg.XbmcInterface\0VideoLibraryOnUpdate\0org.bozzo.quorra.plg.XbmcInterface\0GUIOnScreensaverDeactivated\0org.bozzo.quorra.plg.XbmcInterface\0GUIOnScreensaverActivated\0\0",
 "\0"
 };

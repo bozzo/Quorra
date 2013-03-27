@@ -30,7 +30,7 @@
 #define QUORRA_CONFIG_FILE "/etc/quorra/quorra.conf"
 #define QUORRA_LOG_DOMAIN "Quorra"
 
-typedef gpointer (* quorra_plugin) (gpointer data);
+typedef gpointer (* QuorraPlugin) (gpointer data);
 
 static gchar * config_file = QUORRA_CONFIG_FILE;
 static gint log_level = 7;
@@ -38,7 +38,7 @@ static gboolean verbose = FALSE;
 
 static GOptionEntry entries[] =
 {
-  { "config-file", 'c', 0, G_OPTION_ARG_FILENAME, &config_file, "Beep when done", NULL },
+  { "config-file", 'c', 0, G_OPTION_ARG_FILENAME, &config_file, "Set the configuration file", NULL },
   { "log-level", 'l', 0, G_OPTION_ARG_INT, &log_level, "Define the log level 0 (Emergency) to 7 (Debug)", NULL },
   { "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose, "Be verbose", NULL },
   { NULL }

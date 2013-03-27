@@ -1,5 +1,5 @@
 /*
- * Xbmc.h
+ * QuorraXbmcPlugin.h
  *
  * This file is part of Quorra.
  *
@@ -16,31 +16,33 @@
  * You should have received a copy of the GNU General Public License
  * along with Quorra. If not, see <http://www.gnu.org/licenses/>.
  *
- * Created on 26 mars 2013
+ * Created on 27 mars 2013
  * By bozzo
  *
  **/
 
-#ifndef XBMC_H_
-#define XBMC_H_
+#ifndef QUORRAXBMCPLUGIN_H_
+#define QUORRAXBMCPLUGIN_H_
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <glib.h>
+#include <dbus/dbus-glib.h>
+#include <dbus/dbus-glib-bindings.h>
 #include <gio/gio.h>
 #include <netdb.h>
+#include <glib/gprintf.h>
 
 #include "QuorraXbmcObject.h"
+#include "QuorraXbmcGlue.h"
+#include "Xbmc.h"
 
-#define XBMC_DEFAULT_PORT 9090
-
-gboolean xbmc_connect(QuorraXbmcObject * obj, gchar * host, gint port, GCancellable * cancellable, GError ** error);
-
-gboolean xbmc_close(QuorraXbmcObject * obj, GError ** error);
-
-gchar * xbmc_execute(QuorraXbmcObject * obj, gchar * cmd, GCancellable * cancellable, GError ** error);
+#define QUORRA_XBMC_PATH "/org/bozzo/Quorra/plg/QuorraXbmcObject"
+#define QUORRA_XBMC_SERVICE_NAME "org.bozzo.Quorra.plg.QuorraXbmcObject"
 
 
+gpointer quorra_plugin_run(gpointer data);
 
-#endif /* XBMC_H_ */
+
+#endif /* QUORRAXBMCPLUGIN_H_ */

@@ -24,7 +24,12 @@
 #ifndef QUORRAXBMCOBJECT_H_
 #define QUORRAXBMCOBJECT_H_
 
-
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <glib.h>
+#include <gio/gio.h>
+#include <netdb.h>
 #include <glib-object.h>
 
 typedef struct _QuorraXbmcObject QuorraXbmcObject;
@@ -42,7 +47,7 @@ typedef struct _QuorraXbmcObjectPrivate QuorraXbmcObjectPrivate;
 
 GType quorra_xbmc_object_get_type (void);
 
-GType quorra_xbmc_pause_get_type (void);
+GType quorra_xbmc_playpause_get_type (void);
 GType quorra_xbmc_stop_get_type (void);
 
 
