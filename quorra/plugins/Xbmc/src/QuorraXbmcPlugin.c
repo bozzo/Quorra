@@ -89,17 +89,22 @@ gpointer quorra_plugin_run(gpointer data)
 	GMainLoop * loop;
 	GIOChannel * channel;
 	gboolean success;
+	gpointer * dataptr;
 
 	g_type_init();
 
 	loop = g_main_loop_new(NULL, FALSE);
 
-	connection = dbus_g_bus_get(DBUS_BUS_SESSION, &error);
+	/*connection = dbus_g_bus_get(DBUS_BUS_SESSION, &error);
 
 	if (connection == NULL)
 	{
 		die ("Failed to open connection to bus", error);
-	}
+	}*/
+
+	dataptr = (gpointer *)data;
+	connection = (DBusGConnection *)(dataptr[0]);
+	/*driver_proxy = (DBusGProxy *)(dataptr[1]);*/
 
 	obj = g_object_new (QUORRA_XBMCOBJ_TYPE, NULL);
 

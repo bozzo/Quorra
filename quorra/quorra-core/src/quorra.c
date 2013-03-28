@@ -42,6 +42,13 @@ void quorra_log_handler (const gchar *log_domain, GLogLevelFlags log_level, cons
 	g_printerr("--> %s\n",message);
 }
 
+void die (const char *prefix, GError *error)
+{
+	g_error("%s: %s", prefix, error->message);
+	g_error_free (error);
+	exit(1);
+}
+
 int main (int argc, char *argv[])
 {
 	gchar *filename;
@@ -57,6 +64,12 @@ int main (int argc, char *argv[])
 	GThread ** threads;
 	GModule ** modules;
 
+	DBusGConnection * connection;
+	DBusGProxy * driver_proxy;
+	gpointer data[2];
+
+	g_type_init();
+
 	context = g_option_context_new ("- test tree model performance");
 	g_option_context_add_main_entries (context, entries, NULL);
 	/*g_option_context_add_group (context, gtk_get_option_group (TRUE));*/
@@ -67,6 +80,18 @@ int main (int argc, char *argv[])
 	}
 
 	g_log_set_handler (QUORRA_LOG_DOMAIN, G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION, quorra_log_handler, NULL);
+
+	connection = dbus_g_bus_get(DBUS_BUS_SESSION, &error);
+
+	if (connection == NULL)
+	{
+		die ("Failed to open connection to bus", error);
+	}
+
+	/*driver_proxy = dbus_g_proxy_new_for_name (connection, DBUS_SERVICE_DBUS, DBUS_PATH_DBUS, DBUS_INTERFACE_DBUS);*/
+
+	data[0]=connection;
+	/*data[1]=driver_proxy;*/
 
 	keyfile = load_config(&error);
 	/*filename = g_key_file_get_string (keyfile,"core","plugin",NULL);*/
@@ -106,7 +131,7 @@ int main (int argc, char *argv[])
 		}
 
 		/* call our function in the module */
-		threads[cpt] = g_thread_new( g_strdup_printf("thread-%d",cpt),(GThreadFunc)(quorra_plugins[cpt]),NULL);
+		threads[cpt] = g_thread_new( g_strdup_printf("thread-%d",cpt),(GThreadFunc)(quorra_plugins[cpt]),data);
 	}
 
 	for(cpt = 0; cpt < nbPlugins; cpt++)

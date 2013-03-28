@@ -25,6 +25,8 @@
 
 #include <gmodule.h>
 #include <glib.h>
+#include <dbus/dbus-glib.h>
+#include <dbus/dbus-glib-bindings.h>
 
 #define QUORRA_PLUGIN_METHOD "quorra_plugin_run"
 #define QUORRA_CONFIG_FILE "/etc/quorra/quorra.conf"
