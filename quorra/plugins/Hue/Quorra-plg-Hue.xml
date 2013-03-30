@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node name="/org/bozzo/Quorra/plg/HueObject">
+	<interface name="org.bozzo.quorra.plg.HueInterface">
+		<annotation name="org.freedesktop.DBus.GLib.CSymbol" value="quorra_plg_hue_interface" />
+		<method name="LightOn">
+			<annotation name="org.freedesktop.DBus.GLib.CSymbol" value="quorra_hue_light_on" />
+			<arg type="i" name="id" direction="in" />
+			<arg type="b" name="success" direction="out" />
+		</method>
+		<method name="LightOff">
+			<annotation name="org.freedesktop.DBus.GLib.CSymbol" value="quorra_hue_light_off" />
+			<arg type="i" name="id" direction="in" />
+			<arg type="b" name="success" direction="out" />
+		</method>
+	</interface>
+</node>

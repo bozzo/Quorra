@@ -33,6 +33,7 @@ AC_CHECK_HEADER([netdb.h])
 # Checks for library functions.
 AC_CONFIG_FILES([Makefile
                  plugins/SqueezeSlave/src/Makefile
+                 plugins/Hue/src/Makefile
                  plugins/Xbmc/src/Makefile
                  quorra-core/src/Makefile])
 AC_OUTPUT
