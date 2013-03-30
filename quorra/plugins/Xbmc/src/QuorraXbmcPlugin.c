@@ -23,7 +23,17 @@
 
 #include "QuorraXbmcPlugin.h"
 
-/*static guint signalId;*/
+static guint sigPlayerOnPlay;
+static guint sigPlayerOnPause;
+static guint sigPlayerOnStop;
+static guint sigPlayerOnSeek;
+static guint sigPlaylistOnClear;
+static guint sigPlaylistOnAdd;
+static guint sigSystemOnQuit;
+static guint sigVideoLibraryOnUpdate;
+static guint sigGUIOnScreensaverDeactivated;
+static guint sigGUIOnScreensaverActivated;
+
 
 G_DEFINE_TYPE(QuorraXbmcObject, quorra_xbmc_object, G_TYPE_OBJECT)
 
@@ -31,18 +41,27 @@ static void quorra_xbmc_object_class_init (QuorraXbmcObjectClass * quorra_xbmc_c
 {
 	g_type_class_add_private (quorra_xbmc_class, sizeof (QuorraXbmcObjectPrivate));
 
-	/*signalId = g_signal_new("song_changed",
-			G_OBJECT_CLASS_TYPE(quorra_squeezeslave_class),
-			G_SIGNAL_RUN_LAST,
-			0,
-			NULL,
-			NULL,
-			g_cclosure_marshal_VOID__INT,
-			G_TYPE_NONE,
-			1,
-			G_TYPE_INT);
+	sigPlayerOnPlay = g_signal_new("PlayerOnPlay",G_OBJECT_CLASS_TYPE(quorra_xbmc_class),G_SIGNAL_RUN_LAST,
+                        0, NULL, NULL, g_cclosure_marshal_VOID__STRING, G_TYPE_NONE, 1, G_TYPE_STRING);
+        sigPlayerOnPause = g_signal_new("PlayerOnPause",G_OBJECT_CLASS_TYPE(quorra_xbmc_class),G_SIGNAL_RUN_LAST,
+                        0, NULL, NULL, g_cclosure_marshal_VOID__STRING, G_TYPE_NONE, 1, G_TYPE_STRING);
+        sigPlayerOnStop = g_signal_new("PlayerOnStop",G_OBJECT_CLASS_TYPE(quorra_xbmc_class),G_SIGNAL_RUN_LAST,
+                        0, NULL, NULL, g_cclosure_marshal_VOID__STRING, G_TYPE_NONE, 1, G_TYPE_STRING);
+        sigPlayerOnSeek = g_signal_new("PlayerOnSeek",G_OBJECT_CLASS_TYPE(quorra_xbmc_class),G_SIGNAL_RUN_LAST,
+                        0, NULL, NULL, g_cclosure_marshal_VOID__STRING, G_TYPE_NONE, 1, G_TYPE_STRING);
+        sigPlaylistOnClear = g_signal_new("PlaylistOnClear",G_OBJECT_CLASS_TYPE(quorra_xbmc_class),G_SIGNAL_RUN_LAST,
+                        0, NULL, NULL, g_cclosure_marshal_VOID__STRING, G_TYPE_NONE, 1, G_TYPE_STRING);
+        sigPlaylistOnAdd = g_signal_new("PlaylistOnAdd",G_OBJECT_CLASS_TYPE(quorra_xbmc_class),G_SIGNAL_RUN_LAST,
+                        0, NULL, NULL, g_cclosure_marshal_VOID__STRING, G_TYPE_NONE, 1, G_TYPE_STRING);
+        sigSystemOnQuit = g_signal_new("SystemOnQuit",G_OBJECT_CLASS_TYPE(quorra_xbmc_class),G_SIGNAL_RUN_LAST,
+                        0, NULL, NULL, g_cclosure_marshal_VOID__STRING, G_TYPE_NONE, 1, G_TYPE_STRING);
+        sigVideoLibraryOnUpdate = g_signal_new("VideoLibraryOnUpdate",G_OBJECT_CLASS_TYPE(quorra_xbmc_class),G_SIGNAL_RUN_LAST,
+                        0, NULL, NULL, g_cclosure_marshal_VOID__STRING, G_TYPE_NONE, 1, G_TYPE_STRING);
+        sigGUIOnScreensaverDeactivated = g_signal_new("GUIOnScreensaverDeactivated",G_OBJECT_CLASS_TYPE(quorra_xbmc_class),G_SIGNAL_RUN_LAST,
+                        0, NULL, NULL, g_cclosure_marshal_VOID__STRING, G_TYPE_NONE, 1, G_TYPE_STRING);
+        sigGUIOnScreensaverActivated = g_signal_new("GUIOnScreensaverActivated",G_OBJECT_CLASS_TYPE(quorra_xbmc_class),G_SIGNAL_RUN_LAST,
+                        0, NULL, NULL, g_cclosure_marshal_VOID__STRING, G_TYPE_NONE, 1, G_TYPE_STRING);
 
-	g_print("dummy_object_class_init : signalId = %d\n", signalId);*/
 }
 
 static void quorra_xbmc_object_init (QuorraXbmcObject * quorra_xbmc)

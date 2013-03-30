@@ -141,4 +141,67 @@ gboolean quorra_xbmc_playpause(QuorraXbmcObject * obj, gint playerid, gboolean *
 	return TRUE;
 }
 
+/*
+ *  * DBus Signals
+ *   */
+gboolean PlayerOnPlay(GObject *obj, gchar * sender)
+{
+
+    return TRUE;
+}
+
+gboolean PlayerOnPause(GObject *obj, gchar * sender)
+{
+
+    return TRUE;
+}
+
+gboolean PlayerOnStop(GObject *obj, gchar * sender)
+{
+
+    return TRUE;
+}
+
+gboolean PlayerOnSeek(GObject *obj, gchar * sender)
+{
+
+    return TRUE;
+}
+
+gboolean PlaylistOnClear(GObject *obj, gchar * sender)
+{
+
+    return TRUE;
+}
+
+gboolean PlaylistOnAdd(GObject *obj, gchar * sender)
+{
+
+    return TRUE;
+}
+
+gboolean SystemOnQuit(GObject *obj, gchar * sender)
+{
+
+    return TRUE;
+}
+
+gboolean VideoLibraryOnUpdate(GObject *obj, gchar * sender)
+{
+
+    return TRUE;
+}
+
+gboolean GUIOnScreensaverDeactivated(GObject *obj, gchar * sender)
+{
+
+    return TRUE;
+}
+
+gboolean GUIOnScreensaverActivated(GObject *obj, gchar * sender)
+{
+
+    return TRUE;
+}
+
 

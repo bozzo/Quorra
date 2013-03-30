@@ -55,6 +55,17 @@ struct _QuorraXbmcObjectPrivate
 {
 	GSocket * socket;
 	GIOChannel * channel;
+	/* Signals */
+	guint sigPlayerOnPlay;
+	guint sigPlayerOnPause;
+	guint sigPlayerOnStop;
+        guint sigPlayerOnSeek;
+        guint sigPlaylistOnClear;
+        guint sigPlaylistOnAdd;
+        guint sigSystemOnQuit;
+        guint sigVideoLibraryOnUpdate;
+        guint sigGUIOnScreensaverDeactivated;
+        guint sigGUIOnScreensaverActivated;
 };
 
 struct _QuorraXbmcObject
