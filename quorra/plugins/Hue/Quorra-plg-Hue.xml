@@ -12,5 +12,11 @@
 			<arg type="i" name="id" direction="in" />
 			<arg type="b" name="success" direction="out" />
 		</method>
+		<method name="LightRename">
+			<annotation name="org.freedesktop.DBus.GLib.CSymbol" value="quorra_hue_light_rename" />
+			<arg type="i" name="id" direction="in" />
+			<arg type="s" name="name" direction="in" />
+			<arg type="b" name="success" direction="out" />
+		</method>
 	</interface>
 </node>

@@ -104,6 +104,57 @@ dbus_glib_marshal_quorra_hue_object_BOOLEAN__INT_POINTER_POINTER (GClosure     *
   g_value_set_boolean (return_value, v_return);
 }
 
+/* BOOLEAN:INT,STRING,POINTER,POINTER */
+extern void dbus_glib_marshal_quorra_hue_object_BOOLEAN__INT_STRING_POINTER_POINTER (GClosure     *closure,
+                                                                                     GValue       *return_value,
+                                                                                     guint         n_param_values,
+                                                                                     const GValue *param_values,
+                                                                                     gpointer      invocation_hint,
+                                                                                     gpointer      marshal_data);
+void
+dbus_glib_marshal_quorra_hue_object_BOOLEAN__INT_STRING_POINTER_POINTER (GClosure     *closure,
+                                                                         GValue       *return_value G_GNUC_UNUSED,
+                                                                         guint         n_param_values,
+                                                                         const GValue *param_values,
+                                                                         gpointer      invocation_hint G_GNUC_UNUSED,
+                                                                         gpointer      marshal_data)
+{
+  typedef gboolean (*GMarshalFunc_BOOLEAN__INT_STRING_POINTER_POINTER) (gpointer     data1,
+                                                                        gint         arg_1,
+                                                                        gpointer     arg_2,
+                                                                        gpointer     arg_3,
+                                                                        gpointer     arg_4,
+                                                                        gpointer     data2);
+  register GMarshalFunc_BOOLEAN__INT_STRING_POINTER_POINTER callback;
+  register GCClosure *cc = (GCClosure*) closure;
+  register gpointer data1, data2;
+  gboolean v_return;
+
+  g_return_if_fail (return_value != NULL);
+  g_return_if_fail (n_param_values == 5);
+
+  if (G_CCLOSURE_SWAP_DATA (closure))
+    {
+      data1 = closure->data;
+      data2 = g_value_peek_pointer (param_values + 0);
+    }
+  else
+    {
+      data1 = g_value_peek_pointer (param_values + 0);
+      data2 = closure->data;
+    }
+  callback = (GMarshalFunc_BOOLEAN__INT_STRING_POINTER_POINTER) (marshal_data ? marshal_data : cc->callback);
+
+  v_return = callback (data1,
+                       g_marshal_value_peek_int (param_values + 1),
+                       g_marshal_value_peek_string (param_values + 2),
+                       g_marshal_value_peek_pointer (param_values + 3),
+                       g_marshal_value_peek_pointer (param_values + 4),
+                       data2);
+
+  g_value_set_boolean (return_value, v_return);
+}
+
 G_END_DECLS
 
 #endif /* __dbus_glib_marshal_quorra_hue_object_MARSHAL_H__ */
@@ -112,12 +163,13 @@ G_END_DECLS
 static const DBusGMethodInfo dbus_glib_quorra_hue_object_methods[] = {
   { (GCallback) quorra_hue_light_on, dbus_glib_marshal_quorra_hue_object_BOOLEAN__INT_POINTER_POINTER, 0 },
   { (GCallback) quorra_hue_light_off, dbus_glib_marshal_quorra_hue_object_BOOLEAN__INT_POINTER_POINTER, 68 },
+  { (GCallback) quorra_hue_light_rename, dbus_glib_marshal_quorra_hue_object_BOOLEAN__INT_STRING_POINTER_POINTER, 137 },
 };
 
 const DBusGObjectInfo dbus_glib_quorra_hue_object_object_info = {  1,
   dbus_glib_quorra_hue_object_methods,
-  2,
-"org.bozzo.quorra.plg.HueInterface\0LightOn\0S\0id\0I\0i\0success\0O\0F\0N\0b\0\0org.bozzo.quorra.plg.HueInterface\0LightOff\0S\0id\0I\0i\0success\0O\0F\0N\0b\0\0\0",
+  3,
+"org.bozzo.quorra.plg.HueInterface\0LightOn\0S\0id\0I\0i\0success\0O\0F\0N\0b\0\0org.bozzo.quorra.plg.HueInterface\0LightOff\0S\0id\0I\0i\0success\0O\0F\0N\0b\0\0org.bozzo.quorra.plg.HueInterface\0LightRename\0S\0id\0I\0i\0name\0I\0s\0success\0O\0F\0N\0b\0\0\0",
 "\0",
 "\0"
 };
