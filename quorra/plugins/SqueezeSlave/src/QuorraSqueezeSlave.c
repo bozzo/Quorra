@@ -129,8 +129,14 @@ gboolean quorra_squeezeslave_action_playlist(QuorraSqueezeSlaveObject * obj, gch
 		g_warning("quorra_squeezeslave_action_playlist : cmd is NULL!");
 		return FALSE;
 	}
-	songChanged((GObject *)obj,1,"test");
 
+	if (g_strcmp0 (cmd[2],"newsong") == 0) 			songChanged((GObject *)obj,1, g_uri_unescape_string(cmd[3],""));
+	else if (g_strcmp0 (cmd[2],"addtracks") == 0) 	g_print("playlist  addtracks %s\n",g_strchomp(g_uri_unescape_string(cmd[3],"")));
+	else if (g_strcmp0 (cmd[2],"delete") == 0) 		g_print("playlist  delete %s\n",g_strchomp(g_uri_unescape_string(cmd[3],"")));
+	else if (g_strcmp0 (cmd[2],"open") == 0) 		g_print("playlist  open %s\n",g_strchomp(g_uri_unescape_string(cmd[3],"")));
+	else if (g_strcmp0 (cmd[2],"jump") == 0) 		g_print("playlist  jump %s\n",g_strchomp(g_uri_unescape_string(cmd[3],"")));
+	else if (g_strcmp0 (cmd[2],"stop") == 0) 		g_print("playlist  stop\n");
+	else g_warning("unkown playlist command: %s\n",cmd[2]);
 
 	return TRUE;
 }
@@ -173,15 +179,24 @@ gboolean quorra_squeezeslave_object_listen_callback (GIOChannel * source, GIOCon
 				{
 					quorra_squeezeslave_action_playlist(obj,tokens);
 				}
+				else
+				{
+					for (i = 0; tokens[i] != NULL; i++)
+					{
+						g_print("--> %s -\n",g_uri_unescape_string(tokens[i],""));
+					}
+				}
+			}
+			else
+			{
+				for (i = 0; tokens[i] != NULL; i++)
+				{
+					g_print("[<2] --> %s -\n",g_uri_unescape_string(tokens[i],""));
+				}
 			}
 
-			for (i = 0; tokens[i] != NULL; i++)
-			{
-				g_print("--> %s\n",g_uri_unescape_string(tokens[i],""));
-			}
 			free(tmp);
 			g_strfreev(tokens);
-			g_print ("\n");
 		}
 	}
 	while (bytes_read);
