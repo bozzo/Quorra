@@ -85,6 +85,7 @@ struct _QuorraXbmcObjectClass
  * Methods definition
  */
 GIOChannel * quorra_xbmc_object_getChannel(QuorraXbmcObject * obj);
+gboolean quorra_xbmc_object_isConnected(QuorraXbmcObject * obj);
 GSocket * quorra_xbmc_object_getSocket(QuorraXbmcObject * obj);
 void quorra_xbmc_object_setSocket(QuorraXbmcObject * obj, GSocket * socket);
 gboolean quorra_xbmc_action_player(QuorraXbmcObject * obj, gchar ** cmd);

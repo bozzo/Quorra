@@ -41,7 +41,7 @@ static void quorra_xbmc_object_class_init (QuorraXbmcObjectClass * quorra_xbmc_c
 {
 	g_type_class_add_private (quorra_xbmc_class, sizeof (QuorraXbmcObjectPrivate));
 
-	sigPlayerOnPlay = g_signal_new("PlayerOnPlay",G_OBJECT_CLASS_TYPE(quorra_xbmc_class),G_SIGNAL_RUN_LAST,
+	/*sigPlayerOnPlay = g_signal_new("PlayerOnPlay",G_OBJECT_CLASS_TYPE(quorra_xbmc_class),G_SIGNAL_RUN_LAST,
                         0, NULL, NULL, g_cclosure_marshal_VOID__STRING, G_TYPE_NONE, 1, G_TYPE_STRING);
         sigPlayerOnPause = g_signal_new("PlayerOnPause",G_OBJECT_CLASS_TYPE(quorra_xbmc_class),G_SIGNAL_RUN_LAST,
                         0, NULL, NULL, g_cclosure_marshal_VOID__STRING, G_TYPE_NONE, 1, G_TYPE_STRING);
@@ -60,7 +60,7 @@ static void quorra_xbmc_object_class_init (QuorraXbmcObjectClass * quorra_xbmc_c
         sigGUIOnScreensaverDeactivated = g_signal_new("GUIOnScreensaverDeactivated",G_OBJECT_CLASS_TYPE(quorra_xbmc_class),G_SIGNAL_RUN_LAST,
                         0, NULL, NULL, g_cclosure_marshal_VOID__STRING, G_TYPE_NONE, 1, G_TYPE_STRING);
         sigGUIOnScreensaverActivated = g_signal_new("GUIOnScreensaverActivated",G_OBJECT_CLASS_TYPE(quorra_xbmc_class),G_SIGNAL_RUN_LAST,
-                        0, NULL, NULL, g_cclosure_marshal_VOID__STRING, G_TYPE_NONE, 1, G_TYPE_STRING);
+                        0, NULL, NULL, g_cclosure_marshal_VOID__STRING, G_TYPE_NONE, 1, G_TYPE_STRING);*/
 
 }
 
@@ -78,24 +78,25 @@ static void quorra_xbmc_object_init (QuorraXbmcObject * quorra_xbmc)
 
 	if (! (xbmc_connect(quorra_xbmc,"r4.bozzo.org",9090,NULL,error)))
 	{
-		g_error("quorra_xbmc_object_init : connect failed!");
-		return;
+		g_warning("quorra_xbmc_object_init : connect failed!");
 	}
-
-	if (! (fd = g_socket_get_fd(quorra_xbmc->priv->socket)))
+	else
 	{
-		g_error("quorra_xbmc_object_init : get FD failed!");
-		return;
+		if (! (fd = g_socket_get_fd(quorra_xbmc->priv->socket)))
+		{
+			g_warning("quorra_xbmc_object_init : get FD failed!");
+		}
+		else
+		{
+			quorra_xbmc->priv->channel = g_io_channel_unix_new(fd);
+		}
 	}
-
-	quorra_xbmc->priv->channel = g_io_channel_unix_new(fd);
 }
 
 void die (const char *prefix, GError *error)
 {
-	g_error("%s: %s", prefix, error->message);
+	g_warning("%s: %s", prefix, error->message);
 	g_error_free (error);
-	exit(1);
 }
 
 gpointer quorra_plugin_run(gpointer data)
@@ -127,6 +128,12 @@ gpointer quorra_plugin_run(gpointer data)
 
 	obj = g_object_new (QUORRA_XBMCOBJ_TYPE, NULL);
 
+	if (! quorra_xbmc_object_isConnected(obj))
+	{
+		g_warning ("XBMC not connected, return.");
+		return NULL;
+	}
+	g_print("XBMC connected!");
 	/* Note : l’appel à cette fonction va appeler les
 	 * fonctions définies plus haut :
 	 * - dummy_object_class_init
@@ -154,7 +161,7 @@ gpointer quorra_plugin_run(gpointer data)
 
 	if (request_name_ret != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
 	{
-		g_error ("Got result code %u from requesting name", request_name_ret);
+		g_warning ("Got result code %u from requesting name", request_name_ret);
 		return NULL;
 	}
 
@@ -165,7 +172,7 @@ gpointer quorra_plugin_run(gpointer data)
 	/*g_timeout_add (1000, (GSourceFunc)songChanged, obj);*/
 	if (! (channel = quorra_xbmc_object_getChannel((QuorraXbmcObject *)obj)))
 	{
-		g_error ("Error getting channel");
+		g_warning ("Error getting channel");
 		return NULL;
 	}
 	g_io_add_watch(channel, G_IO_IN | G_IO_ERR | G_IO_HUP, quorra_xbmc_object_listen_callback, obj);

@@ -69,6 +69,7 @@ struct _QuorraSqueezeSlaveObjectClass
  * Methods definition
  */
 GIOChannel * quorra_squeezeslave_object_getChannel(QuorraSqueezeSlaveObject * obj);
+gboolean quorra_squeezeslave_object_isConnected(QuorraSqueezeSlaveObject * obj);
 GSocket * quorra_squeezeslave_object_getSocket(QuorraSqueezeSlaveObject * obj);
 void quorra_squeezeslave_object_setSocket(QuorraSqueezeSlaveObject * obj, GSocket * socket);
 gboolean quorra_squeezeslave_action_playlist(QuorraSqueezeSlaveObject * obj, gchar ** cmd);

@@ -37,6 +37,19 @@ GIOChannel * quorra_xbmc_object_getChannel(QuorraXbmcObject * obj)
 	return NULL;
 }
 
+gboolean quorra_xbmc_object_isConnected(QuorraXbmcObject * obj)
+{
+	QuorraXbmcObjectPrivate * priv;
+
+	priv = QUORRA_XBMCOBJ_GET_PRIVATE (obj);
+
+	if (priv != NULL && priv->socket != NULL)
+	{
+		return TRUE;
+	}
+	return FALSE;
+}
+
 GSocket * quorra_xbmc_object_getSocket(QuorraXbmcObject * obj)
 {
 	QuorraXbmcObjectPrivate * priv;
@@ -64,7 +77,7 @@ gboolean quorra_xbmc_action_playlist(QuorraXbmcObject * obj, gchar ** cmd)
 {
 	if (cmd == NULL)
 	{
-		g_error("quorra_xbmc_action_playlist : cmd is NULL!");
+		g_warning("quorra_xbmc_action_playlist : cmd is NULL!");
 		return FALSE;
 	}
 	/*songChanged((GObject *)obj,1,"test");*/
@@ -85,13 +98,13 @@ gboolean quorra_xbmc_object_listen_callback (GIOChannel * source, GIOCondition c
 
 	if (source == NULL)
 	{
-		g_error("quorra_xbmc_object_listen_callback : source is NULL!");
+		g_warning("quorra_xbmc_object_listen_callback : source is NULL!");
 		return FALSE;
 	}
 
 	if (data == NULL)
 		{
-			g_error("quorra_xbmc_object_listen_callback : data is NULL!");
+			g_warning("quorra_xbmc_object_listen_callback : data is NULL!");
 			return FALSE;
 		}
 

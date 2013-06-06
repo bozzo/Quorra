@@ -106,16 +106,16 @@ int main (int argc, char *argv[])
 		modules[cpt] = g_module_open (plugins[cpt], G_MODULE_BIND_LAZY);
 		if (!modules[cpt])
 		{
-			g_error ("%s", g_module_error ());
+			g_error ("g_module_open: %s", g_module_error ());
 			return 1;
 		}
 
 		if (!g_module_symbol (modules[cpt], QUORRA_PLUGIN_METHOD, (gpointer *)&(quorra_plugins[cpt]) ))
 		{
-			g_error ("%s: %s", plugins[cpt], g_module_error ());
+			g_error ("g_module_symbol %s: %s", plugins[cpt], g_module_error ());
 			if (!g_module_close (modules[cpt]))
 			{
-				g_warning ("%s: %s", plugins[cpt], g_module_error ());
+				g_warning ("g_module_close %s: %s", plugins[cpt], g_module_error ());
 			}
 			return 1;
 		}
@@ -125,7 +125,7 @@ int main (int argc, char *argv[])
 			g_error ("symbol say_hello is NULL");
 			if (!g_module_close (modules[cpt]))
 			{
-				g_warning ("%s: %s", plugins[cpt], g_module_error ());
+				g_warning ("g_module_close %s: %s", plugins[cpt], g_module_error ());
 			}
 			return 1;
 		}
@@ -140,7 +140,7 @@ int main (int argc, char *argv[])
 
 		if (!g_module_close (modules[cpt]))
 		{
-			g_warning ("%s: %s", plugins[cpt], g_module_error ());
+			g_warning ("g_module_close %s: %s", plugins[cpt], g_module_error ());
 		}
 	}
 

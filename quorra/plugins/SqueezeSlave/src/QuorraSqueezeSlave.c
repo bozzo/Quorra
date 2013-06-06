@@ -59,13 +59,13 @@ static void quorra_squeezeslave_object_init (QuorraSqueezeSlaveObject * quorra_s
 
 	if (! (squeezeserver_connect(quorra_squeezeslave,"millenium.bozzo.org",9090,NULL,error)))
 	{
-		g_error("quorra_squeezeslave_object_init : connect failed!");
+		g_warning("quorra_squeezeslave_object_init : connect failed!");
 		return;
 	}
 
 	if (! (fd = g_socket_get_fd(quorra_squeezeslave->priv->socket)))
 	{
-		g_error("quorra_squeezeslave_object_init : get FD failed!");
+		g_warning("quorra_squeezeslave_object_init : get FD failed!");
 		return;
 	}
 
@@ -84,6 +84,19 @@ GIOChannel * quorra_squeezeslave_object_getChannel(QuorraSqueezeSlaveObject * ob
 		return priv->channel;
 	}
 	return NULL;
+}
+
+gboolean quorra_squeezeslave_object_isConnected(QuorraSqueezeSlaveObject * obj)
+{
+	QuorraSqueezeSlaveObjectPrivate * priv;
+
+	priv = QUORRA_SQUEEZESLAVEOBJ_GET_PRIVATE (obj);
+
+	if (priv != NULL && priv->socket != NULL)
+	{
+		return TRUE;
+	}
+	return FALSE;
 }
 
 GSocket * quorra_squeezeslave_object_getSocket(QuorraSqueezeSlaveObject * obj)
@@ -113,7 +126,7 @@ gboolean quorra_squeezeslave_action_playlist(QuorraSqueezeSlaveObject * obj, gch
 {
 	if (cmd == NULL)
 	{
-		g_error("quorra_squeezeslave_action_playlist : cmd is NULL!");
+		g_warning("quorra_squeezeslave_action_playlist : cmd is NULL!");
 		return FALSE;
 	}
 	songChanged((GObject *)obj,1,"test");
@@ -134,13 +147,13 @@ gboolean quorra_squeezeslave_object_listen_callback (GIOChannel * source, GIOCon
 
 	if (source == NULL)
 	{
-		g_error("quorra_squeezeslave_object_listen_callback : source is NULL!");
+		g_warning("quorra_squeezeslave_object_listen_callback : source is NULL!");
 		return FALSE;
 	}
 
 	if (data == NULL)
 		{
-			g_error("quorra_squeezeslave_object_listen_callback : data is NULL!");
+			g_warning("quorra_squeezeslave_object_listen_callback : data is NULL!");
 			return FALSE;
 		}
 
@@ -187,7 +200,7 @@ gboolean quorra_squeezeslave_listen(QuorraSqueezeSlaveObject * obj, gboolean * s
 {
 	if (squeezeserver_execute(obj,"listen 1\n",NULL,error))
 	{
-		g_error("quorra_squeezeslave_pause : execute failed!");
+		g_warning("quorra_squeezeslave_pause : execute failed!");
 
 		*success = FALSE;
 		return FALSE;
@@ -209,7 +222,7 @@ gboolean quorra_squeezeslave_stop(QuorraSqueezeSlaveObject * obj, gchar * name, 
 
 	if (! squeezeserver_close(obj,error))
 	{
-		g_error("quorra_squeezeslave_stop : close failed!");
+		g_warning("quorra_squeezeslave_stop : close failed!");
 
 		*success = FALSE;
 		return FALSE;
@@ -224,7 +237,7 @@ gboolean quorra_squeezeslave_nextsong(QuorraSqueezeSlaveObject * obj, gchar * na
 {
 	if (squeezeserver_execute(obj,g_strdup_printf ("%s playlist index +%d",name,hops),NULL,error))
 	{
-		g_error("quorra_squeezeslave_nextsong : execute failed!");
+		g_warning("quorra_squeezeslave_nextsong : execute failed!");
 
 		*success = FALSE;
 		return FALSE;
@@ -239,7 +252,7 @@ gboolean quorra_squeezeslave_pause(QuorraSqueezeSlaveObject * obj, gchar * name,
 {
 	if (squeezeserver_execute(obj,g_strconcat(name," pause\n",NULL),NULL,error))
 	{
-		g_error("quorra_squeezeslave_pause : execute failed!");
+		g_warning("quorra_squeezeslave_pause : execute failed!");
 
 		*success = FALSE;
 		return FALSE;
@@ -252,9 +265,8 @@ gboolean quorra_squeezeslave_pause(QuorraSqueezeSlaveObject * obj, gchar * name,
 
 void die (const char *prefix, GError *error)
 {
-	g_error("%s: %s", prefix, error->message);
+	g_warning("%s: %s", prefix, error->message);
 	g_error_free (error);
-	exit(1);
 }
 
 gpointer quorra_plugin_run(gpointer data)
@@ -285,6 +297,13 @@ gpointer quorra_plugin_run(gpointer data)
 
 	obj = g_object_new (QUORRA_SQUEEZESLAVEOBJ_TYPE, NULL);
 
+	if (! quorra_squeezeslave_object_isConnected(obj))
+	{
+		g_warning ("SqueezeServer not connected, return.");
+		return NULL;
+	}
+	g_print("SqueezeServer connected!");
+
 	/* Note : l’appel à cette fonction va appeler les
 	 * fonctions définies plus haut :
 	 * - dummy_object_class_init
@@ -312,7 +331,7 @@ gpointer quorra_plugin_run(gpointer data)
 
 	if (request_name_ret != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
 	{
-		g_error ("Got result code %u from requesting name", request_name_ret);
+		g_warning ("Got result code %u from requesting name", request_name_ret);
 		return NULL;
 	}
 
@@ -323,14 +342,14 @@ gpointer quorra_plugin_run(gpointer data)
 	/*g_timeout_add (1000, (GSourceFunc)songChanged, obj);*/
 	if (! (channel = quorra_squeezeslave_object_getChannel((QuorraSqueezeSlaveObject *)obj)))
 	{
-		g_error ("Error getting channel");
+		g_warning ("Error getting channel");
 		return NULL;
 	}
 	g_io_add_watch(channel, G_IO_IN | G_IO_ERR | G_IO_HUP, quorra_squeezeslave_object_listen_callback, obj);
 
 	if (! quorra_squeezeslave_listen((QuorraSqueezeSlaveObject *)obj, &success, &error))
 	{
-		g_error("Error listen");
+		g_warning("Error listen");
 	}
 
 	/* Si tout s’est bien déroulé, on attend les connections */
