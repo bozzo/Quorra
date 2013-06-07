@@ -72,7 +72,9 @@ GIOChannel * quorra_squeezeslave_object_getChannel(QuorraSqueezeSlaveObject * ob
 gboolean quorra_squeezeslave_object_isConnected(QuorraSqueezeSlaveObject * obj);
 GSocket * quorra_squeezeslave_object_getSocket(QuorraSqueezeSlaveObject * obj);
 void quorra_squeezeslave_object_setSocket(QuorraSqueezeSlaveObject * obj, GSocket * socket);
+
 gboolean quorra_squeezeslave_action_playlist(QuorraSqueezeSlaveObject * obj, gchar ** cmd);
+gboolean quorra_squeezeslave_action_other(QuorraSqueezeSlaveObject * obj, gchar ** cmd);
 
 /*
  * Listen to socket
@@ -87,6 +89,12 @@ gboolean quorra_squeezeslave_pause(QuorraSqueezeSlaveObject * obj, gchar * name,
 gboolean quorra_squeezeslave_nextsong(QuorraSqueezeSlaveObject * obj, gchar * name, gint32 hops, gboolean * success, GError **error);
 gboolean quorra_squeezeslave_stop(QuorraSqueezeSlaveObject * obj, gchar * name, gint32 time, gboolean * success, GError **error);
 
-gboolean songChanged(GObject *obj,gint id, gchar * name);
+gboolean playlistSongChanged(GObject *obj,gint id, gchar * name);
+gboolean playlistSongAdded(GObject *obj,gint id, gchar * name);
+gboolean playlistSongDeleted(GObject *obj,gint id, gchar * name);
+gboolean playlistSongOpen(GObject *obj,gint id, gchar * name);
+gboolean playlistSongJump(GObject *obj,gint id, gchar * name);
+gboolean playlistStop(GObject *obj,gint id, gchar * name);
+gboolean playlistPause(GObject *obj,gint id, gchar * name);
 
 #endif /* QUORRA_SQUEEZESLAVE_OBJECT_H_ */

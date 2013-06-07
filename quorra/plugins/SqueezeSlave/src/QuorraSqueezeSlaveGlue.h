@@ -170,7 +170,7 @@ const DBusGObjectInfo dbus_glib_quorra_squeezeslave_object_object_info = {  1,
   dbus_glib_quorra_squeezeslave_object_methods,
   3,
 "org.bozzo.quorra.plg.QuorraSqueezeSlaveInterface\0Pause\0S\0name\0I\0s\0success\0O\0F\0N\0b\0\0org.bozzo.quorra.plg.QuorraSqueezeSlaveInterface\0NextSong\0S\0name\0I\0s\0hops\0I\0i\0success\0O\0F\0N\0b\0\0org.bozzo.quorra.plg.QuorraSqueezeSlaveInterface\0Stop\0S\0name\0I\0s\0time\0I\0i\0success\0O\0F\0N\0b\0\0\0",
-"org.bozzo.quorra.plg.QuorraSqueezeSlaveInterface\0songChanged\0\0",
+"org.bozzo.quorra.plg.QuorraSqueezeSlaveInterface\0playlistSongChanged\0org.bozzo.quorra.plg.QuorraSqueezeSlaveInterface\0playlistSongAdded\0org.bozzo.quorra.plg.QuorraSqueezeSlaveInterface\0playlistSongDeleted\0org.bozzo.quorra.plg.QuorraSqueezeSlaveInterface\0playlistSongOpen\0org.bozzo.quorra.plg.QuorraSqueezeSlaveInterface\0playlistSongJump\0org.bozzo.quorra.plg.QuorraSqueezeSlaveInterface\0playlistStop\0org.bozzo.quorra.plg.QuorraSqueezeSlaveInterface\0playlistPause\0\0",
 "\0"
 };
 

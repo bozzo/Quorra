@@ -23,7 +23,8 @@
 #include "QuorraSqueezeSlave.h"
 
 
-static guint signalId;
+static guint signalPlaylistSongChanged, signalPlaylistSongAdded, signalPlaylistSongDeleted, signalPlaylistSongOpen, signalPlaylistSongJump,
+			signalPlaylistStop, signalPlaylistPause;
 
 G_DEFINE_TYPE(QuorraSqueezeSlaveObject, quorra_squeezeslave_object, G_TYPE_OBJECT)
 
@@ -31,7 +32,7 @@ static void quorra_squeezeslave_object_class_init (QuorraSqueezeSlaveObjectClass
 {
 	g_type_class_add_private (quorra_squeezeslave_class, sizeof (QuorraSqueezeSlaveObjectPrivate));
 
-	signalId = g_signal_new("song_changed",
+	signalPlaylistSongChanged = g_signal_new("playlist_song_changed",
 			G_OBJECT_CLASS_TYPE(quorra_squeezeslave_class),
 			G_SIGNAL_RUN_LAST,
 			0,
@@ -42,7 +43,73 @@ static void quorra_squeezeslave_object_class_init (QuorraSqueezeSlaveObjectClass
 			1,
 			G_TYPE_INT);
 
-	g_print("dummy_object_class_init : signalId = %d\n", signalId);
+	signalPlaylistSongAdded = g_signal_new("playlist_song_added",
+			G_OBJECT_CLASS_TYPE(quorra_squeezeslave_class),
+			G_SIGNAL_RUN_LAST,
+			0,
+			NULL,
+			NULL,
+			g_cclosure_marshal_VOID__INT,
+			G_TYPE_NONE,
+			1,
+			G_TYPE_INT);
+
+	signalPlaylistSongDeleted = g_signal_new("playlist_song_deleted",
+			G_OBJECT_CLASS_TYPE(quorra_squeezeslave_class),
+			G_SIGNAL_RUN_LAST,
+			0,
+			NULL,
+			NULL,
+			g_cclosure_marshal_VOID__INT,
+			G_TYPE_NONE,
+			1,
+			G_TYPE_INT);
+
+	signalPlaylistSongOpen = g_signal_new("playlist_song_open",
+			G_OBJECT_CLASS_TYPE(quorra_squeezeslave_class),
+			G_SIGNAL_RUN_LAST,
+			0,
+			NULL,
+			NULL,
+			g_cclosure_marshal_VOID__INT,
+			G_TYPE_NONE,
+			1,
+			G_TYPE_INT);
+
+	signalPlaylistSongJump = g_signal_new("playlist_song_jump",
+			G_OBJECT_CLASS_TYPE(quorra_squeezeslave_class),
+			G_SIGNAL_RUN_LAST,
+			0,
+			NULL,
+			NULL,
+			g_cclosure_marshal_VOID__INT,
+			G_TYPE_NONE,
+			1,
+			G_TYPE_INT);
+
+	signalPlaylistStop = g_signal_new("playlist_stop",
+			G_OBJECT_CLASS_TYPE(quorra_squeezeslave_class),
+			G_SIGNAL_RUN_LAST,
+			0,
+			NULL,
+			NULL,
+			g_cclosure_marshal_VOID__INT,
+			G_TYPE_NONE,
+			1,
+			G_TYPE_INT);
+
+	signalPlaylistPause = g_signal_new("playlist_pause",
+			G_OBJECT_CLASS_TYPE(quorra_squeezeslave_class),
+			G_SIGNAL_RUN_LAST,
+			0,
+			NULL,
+			NULL,
+			g_cclosure_marshal_VOID__INT,
+			G_TYPE_NONE,
+			1,
+			G_TYPE_INT);
+
+	g_print("dummy_object_class_init : signals created.\n");
 }
 
 static void quorra_squeezeslave_object_init (QuorraSqueezeSlaveObject * quorra_squeezeslave)
@@ -124,20 +191,55 @@ void quorra_squeezeslave_object_setSocket(QuorraSqueezeSlaveObject * obj, GSocke
 
 gboolean quorra_squeezeslave_action_playlist(QuorraSqueezeSlaveObject * obj, gchar ** cmd)
 {
-	if (cmd == NULL)
+	if (cmd == NULL || cmd[2] == NULL)
 	{
 		g_warning("quorra_squeezeslave_action_playlist : cmd is NULL!");
 		return FALSE;
 	}
 
-	if (g_strcmp0 (cmd[2],"newsong") == 0) 			songChanged((GObject *)obj,1, g_uri_unescape_string(cmd[3],""));
-	else if (g_strcmp0 (cmd[2],"addtracks") == 0) 	g_print("playlist  addtracks %s\n",g_strchomp(g_uri_unescape_string(cmd[3],"")));
-	else if (g_strcmp0 (cmd[2],"delete") == 0) 		g_print("playlist  delete %s\n",g_strchomp(g_uri_unescape_string(cmd[3],"")));
-	else if (g_strcmp0 (cmd[2],"open") == 0) 		g_print("playlist  open %s\n",g_strchomp(g_uri_unescape_string(cmd[3],"")));
-	else if (g_strcmp0 (cmd[2],"jump") == 0) 		g_print("playlist  jump %s\n",g_strchomp(g_uri_unescape_string(cmd[3],"")));
-	else if (g_strcmp0 (cmd[2],"stop") == 0) 		g_print("playlist  stop\n");
+	if (g_strcmp0 (cmd[2],"newsong") == 0) 			playlistSongChanged((GObject *)obj,1, g_uri_unescape_string(cmd[3],""));
+	else if (g_strcmp0 (cmd[2],"addtracks") == 0) 	playlistSongAdded((GObject *)obj,1, g_uri_unescape_string(cmd[3],""));
+	else if (g_strcmp0 (cmd[2],"delete") == 0) 		playlistSongDeleted((GObject *)obj,1, g_uri_unescape_string(cmd[3],""));
+	else if (g_strcmp0 (cmd[2],"open") == 0) 		playlistSongOpen((GObject *)obj,1, g_uri_unescape_string(cmd[3],""));
+	else if (g_strcmp0 (cmd[2],"jump") == 0) 		playlistSongJump((GObject *)obj,1, g_uri_unescape_string(cmd[3],""));
+	else if (g_strcmp0 (cmd[2],"stop") == 0) 		playlistStop((GObject *)obj,1, g_uri_unescape_string(cmd[3],""));
+	else if (g_strcmp0 (cmd[2],"pause") == 0) 		playlistPause((GObject *)obj,1, g_uri_unescape_string(cmd[3],""));
 	else g_warning("unkown playlist command: %s\n",cmd[2]);
 
+	return TRUE;
+}
+
+gboolean quorra_squeezeslave_action_other(QuorraSqueezeSlaveObject * obj, gchar ** cmd)
+{
+	gint i;
+
+	if (cmd == NULL)
+	{
+		g_warning("quorra_squeezeslave_action_other : cmd is NULL!");
+		return FALSE;
+	}
+
+	if (g_strcmp0 (cmd[0],"rescan") == 0)
+	{
+		if (g_strcmp0 (cmd[1],"full") == 0) 			g_print("rescan full %s\n",g_strchomp(g_uri_unescape_string(cmd[2],"")));
+		else if (g_strcmp0 (cmd[1],"done") == 0) 		g_print("rescan done.\n");
+		else g_warning("unkown rescan command: %s\n",cmd[1]);
+	}
+	else if (g_strcmp0 (cmd[0],"prefset") == 0)
+	{
+		if (g_strcmp0 (cmd[1],"server") == 0) 			g_print("prefset server %s\n",g_strchomp(g_uri_unescape_string(cmd[2],"")));
+		else if (g_strcmp0 (cmd[1],"client") == 0) 		g_print("prefset client %s\n",g_strchomp(g_uri_unescape_string(cmd[2],"")));
+		else g_warning("unkown prefset command: %s\n",cmd[1]);
+	}
+	else
+	{
+		g_print("\n-----> ");
+		for (i = 0; cmd[i] != NULL; i++)
+		{
+			g_print("%s ",g_strchomp(g_uri_unescape_string(cmd[i],"")));
+		}
+		g_print(" <-----\n\n");
+	}
 	return TRUE;
 }
 
@@ -158,10 +260,10 @@ gboolean quorra_squeezeslave_object_listen_callback (GIOChannel * source, GIOCon
 	}
 
 	if (data == NULL)
-		{
-			g_warning("quorra_squeezeslave_object_listen_callback : data is NULL!");
-			return FALSE;
-		}
+	{
+		g_warning("quorra_squeezeslave_object_listen_callback : data is NULL!");
+		return FALSE;
+	}
 
 	obj = (QuorraSqueezeSlaveObject *)data;
 
@@ -181,10 +283,7 @@ gboolean quorra_squeezeslave_object_listen_callback (GIOChannel * source, GIOCon
 				}
 				else
 				{
-					for (i = 0; tokens[i] != NULL; i++)
-					{
-						g_print("--> %s -\n",g_uri_unescape_string(tokens[i],""));
-					}
+					quorra_squeezeslave_action_other(obj,tokens);
 				}
 			}
 			else
@@ -204,12 +303,55 @@ gboolean quorra_squeezeslave_object_listen_callback (GIOChannel * source, GIOCon
 	return TRUE;
 }
 
-gboolean songChanged(GObject *obj,gint id, gchar * name)
+gboolean playlistSongChanged(GObject *obj,gint id, gchar * name)
 {
-	g_print("song_changed!\n");
-	g_signal_emit(obj, signalId, 0, 1);
+	g_print("signal --> playlistSongChanged!\n");
+	g_signal_emit(obj, signalPlaylistSongChanged, 0, 1);
 	return TRUE;
 }
+
+gboolean playlistSongAdded(GObject *obj,gint id, gchar * name)
+{
+	g_print("signal --> playlistSongAdded!\n");
+	g_signal_emit(obj, signalPlaylistSongAdded, 0, 1);
+	return TRUE;
+}
+
+gboolean playlistSongDeleted(GObject *obj,gint id, gchar * name)
+{
+	g_print("signal --> playlistSongDeleted!\n");
+	g_signal_emit(obj, signalPlaylistSongDeleted, 0, 1);
+	return TRUE;
+}
+
+gboolean playlistSongOpen(GObject *obj,gint id, gchar * name)
+{
+	g_print("signal --> playlistSongOpen!\n");
+	g_signal_emit(obj, signalPlaylistSongOpen, 0, 1);
+	return TRUE;
+}
+
+gboolean playlistSongJump(GObject *obj,gint id, gchar * name)
+{
+	g_print("signal --> playlistSongJump!\n");
+	g_signal_emit(obj, signalPlaylistSongJump, 0, 1);
+	return TRUE;
+}
+
+gboolean playlistStop(GObject *obj,gint id, gchar * name)
+{
+	g_print("signal --> playlistStop!\n");
+	g_signal_emit(obj, signalPlaylistStop, 0, 1);
+	return TRUE;
+}
+
+gboolean playlistPause(GObject *obj,gint id, gchar * name)
+{
+	g_print("signal --> playlistPause!\n");
+	g_signal_emit(obj, signalPlaylistPause, 0, 1);
+	return TRUE;
+}
+
 
 gboolean quorra_squeezeslave_listen(QuorraSqueezeSlaveObject * obj, gboolean * success, GError **error)
 {
@@ -354,7 +496,7 @@ gpointer quorra_plugin_run(gpointer data)
 	g_print ("GLib test service entering main loop\n");
 
 	/* Envoi du signal toutes les secondes */
-	/*g_timeout_add (1000, (GSourceFunc)songChanged, obj);*/
+	/*g_timeout_add (1000, (GSourceFunc)playlistSongChanged, obj);*/
 	if (! (channel = quorra_squeezeslave_object_getChannel((QuorraSqueezeSlaveObject *)obj)))
 	{
 		g_warning ("Error getting channel");

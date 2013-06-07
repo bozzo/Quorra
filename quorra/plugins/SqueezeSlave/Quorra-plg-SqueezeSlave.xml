@@ -41,7 +41,31 @@ By bozzo
 			<arg type="i" name="time" direction="in" />
 			<arg type="b" name="success" direction="out" />
 		</method>
-		<signal name="songChanged">
+		<signal name="playlistSongChanged">
+			<arg type="i" name="id" direction="out" />
+			<!-- <arg type="s" name="name" direction="out" /> -->
+		</signal>
+		<signal name="playlistSongAdded">
+			<arg type="i" name="id" direction="out" />
+			<!-- <arg type="s" name="name" direction="out" /> -->
+		</signal>
+		<signal name="playlistSongDeleted">
+			<arg type="i" name="id" direction="out" />
+			<!-- <arg type="s" name="name" direction="out" /> -->
+		</signal>
+		<signal name="playlistSongOpen">
+			<arg type="i" name="id" direction="out" />
+			<!-- <arg type="s" name="name" direction="out" /> -->
+		</signal>
+		<signal name="playlistSongJump">
+			<arg type="i" name="id" direction="out" />
+			<!-- <arg type="s" name="name" direction="out" /> -->
+		</signal>
+		<signal name="playlistStop">
+			<arg type="i" name="id" direction="out" />
+			<!-- <arg type="s" name="name" direction="out" /> -->
+		</signal>
+		<signal name="playlistPause">
 			<arg type="i" name="id" direction="out" />
 			<!-- <arg type="s" name="name" direction="out" /> -->
 		</signal>
