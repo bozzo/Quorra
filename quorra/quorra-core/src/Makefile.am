@@ -5,4 +5,4 @@ INCLUDES = -DG_LOG_DOMAIN=\"Quorra\"
 # this lists the binaries to produce, the (non-PHONY, binary) targets in
 # the previous manual Makefile
 bin_PROGRAMS = quorra
-quorra_SOURCES = quorra.c
+quorra_SOURCES = quorra.c listener.c

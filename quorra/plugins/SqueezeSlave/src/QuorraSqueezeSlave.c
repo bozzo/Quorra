@@ -405,18 +405,16 @@ gboolean quorra_squeezeslave_nextsong(QuorraSqueezeSlaveObject * obj, gchar * na
 	return TRUE;
 }
 
-gboolean quorra_squeezeslave_pause(QuorraSqueezeSlaveObject * obj, gchar * name, gboolean * success, GError **error)
+gboolean quorra_squeezeslave_pause(QuorraSqueezeSlaveObject * obj, gchar * name, GError **error)
 {
 	if (squeezeserver_execute(obj,g_strconcat(name," pause\n",NULL),NULL,error))
 	{
 		g_warning("quorra_squeezeslave_pause : execute failed!");
 
-		*success = FALSE;
 		return FALSE;
 	}
 
 	g_print ("quorra_squeezeslave_pause -> %s\n",name);
-	*success = TRUE;
 	return TRUE;
 }
 

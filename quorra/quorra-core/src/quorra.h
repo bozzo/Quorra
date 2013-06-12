@@ -23,6 +23,7 @@
 #ifndef QUORRA_H_
 #define QUORRA_H_
 
+#include "listener.h"
 #include <gmodule.h>
 #include <glib.h>
 #include <dbus/dbus-glib.h>

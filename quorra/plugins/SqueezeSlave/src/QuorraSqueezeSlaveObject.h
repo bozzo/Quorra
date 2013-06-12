@@ -85,7 +85,7 @@ gboolean quorra_squeezeslave_listen(QuorraSqueezeSlaveObject * obj, gboolean * s
 /*
  * DBus callback
  */
-gboolean quorra_squeezeslave_pause(QuorraSqueezeSlaveObject * obj, gchar * name, gboolean * success, GError **error);
+gboolean quorra_squeezeslave_pause(QuorraSqueezeSlaveObject * obj, gchar * name, GError **error);
 gboolean quorra_squeezeslave_nextsong(QuorraSqueezeSlaveObject * obj, gchar * name, gint32 hops, gboolean * success, GError **error);
 gboolean quorra_squeezeslave_stop(QuorraSqueezeSlaveObject * obj, gchar * name, gint32 time, gboolean * success, GError **error);
 

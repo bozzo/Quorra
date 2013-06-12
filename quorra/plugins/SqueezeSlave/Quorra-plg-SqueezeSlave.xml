@@ -25,7 +25,7 @@ By bozzo
 			<annotation name="org.freedesktop.DBus.GLib.CSymbol"
 				value="quorra_squeezeslave_pause" />
 			<arg type="s" name="name" direction="in" />
-			<arg type="b" name="success" direction="out" />
+			<!-- <arg type="b" name="success" direction="out" /> -->
 		</method>
 		<method name="NextSong">
 			<annotation name="org.freedesktop.DBus.GLib.CSymbol"

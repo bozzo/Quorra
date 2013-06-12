@@ -134,7 +134,12 @@ int main (int argc, char *argv[])
 		threads[cpt] = g_thread_new( g_strdup_printf("thread-%d",cpt),(GThreadFunc)(quorra_plugins[cpt]),data);
 	}
 
-	for(cpt = 0; cpt < nbPlugins; cpt++)
+	g_usleep(3 * G_USEC_PER_SEC);
+
+	/* start the listener thread */
+	threads[++cpt] = g_thread_new("thread-listen",quorra_listen,data);
+
+	for(cpt = 0; cpt < nbPlugins + 1; cpt++)
 	{
 		g_thread_join(threads[cpt]);
 
