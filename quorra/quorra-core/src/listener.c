@@ -37,8 +37,8 @@ gpointer quorra_listen(gpointer data)
 	GError *error = NULL;
 	DBusGConnection *connection;
 	DBusGProxy *proxy;
-	gboolean out = FALSE;
-	int ret_signal;
+	/*gboolean out = FALSE;
+	int ret_signal;*/
 	gpointer * dataptr;
 	gchar * signalName,* quorraPath,* quorraServiceName,* quorraInterfaceName;
 
@@ -51,8 +51,8 @@ gpointer quorra_listen(gpointer data)
 	 */
 	/*connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 	if (connection == NULL)
-		die ("Failed to open connection to bus", error);
-	 */
+		die ("Failed to open connection to bus", error);*/
+
 	dataptr = (gpointer *)data;
 	connection = (DBusGConnection *)(dataptr[0]);
 	/* FIXME get signal name from dataptr */
@@ -84,10 +84,10 @@ gpointer quorra_listen(gpointer data)
 			G_TYPE_STRING, "squeezeslave", G_TYPE_INVALID,
 			 G_TYPE_INVALID))
 		die ("Call to dbus_g_proxy_call HelloWorld failed", error);
-	 */
-	g_print("listen : method called.\n");
 
-	//attach to a signal
+	g_print("listen : method called.\n");*/
+
+	/*attach to a signal*/
 	dbus_g_proxy_add_signal(proxy,
 			/* Nom du signal */
 			signalName,
@@ -103,7 +103,7 @@ gpointer quorra_listen(gpointer data)
 			 * à la réception
 			 * d’un signal
 			 */
-			G_CALLBACK(pingReceptionHandler),
+			G_CALLBACK(pauseSignalHandler),
 			NULL,
 			NULL);
 
@@ -112,7 +112,18 @@ gpointer quorra_listen(gpointer data)
 }
 
 /* fonction de rappel */
-static void pingReceptionHandler(DBusGProxy* proxy, int ret)
+void pauseSignalHandler(DBusGProxy* proxy)
 {
-	g_printf("signal <-- playlistSongChanged\n", ret);
+	g_print("signal <-- playlistSongChanged\n");
+
+	/* Fonction qui appelle la méthode "HelloWorld" de façon synchrone.
+	 * - Ensuite vient la liste de tous les arguments d’entrée
+	 * selon ce schéma : (TYPE, valeur).
+	 * Cette liste se termine par la constante : G_TYPE_INVALID
+	 * - Ensuite la liste des arguments de sortie qui se termine par
+	 * une seconde constante : G_TYPE_INVALID
+	 */
+	dbus_g_proxy_call_no_reply (proxy, "Pause", G_TYPE_STRING, "Squeezeslave", G_TYPE_INVALID);
+
+	/*g_print("listen : method called.\n");*/
 }

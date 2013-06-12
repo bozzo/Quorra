@@ -51,7 +51,7 @@ void die (const char *prefix, GError *error)
 
 int main (int argc, char *argv[])
 {
-	gchar *filename;
+	/*gchar *filename;*/
 	gchar ** plugins;
 	gsize nbPlugins;
 	gint cpt;
@@ -65,7 +65,7 @@ int main (int argc, char *argv[])
 	GModule ** modules;
 
 	DBusGConnection * connection;
-	DBusGProxy * driver_proxy;
+	/*DBusGProxy * driver_proxy;*/
 	gpointer data[2];
 
 	g_type_init();
@@ -131,7 +131,7 @@ int main (int argc, char *argv[])
 		}
 
 		/* call our function in the module */
-		threads[cpt] = g_thread_new( g_strdup_printf("thread-%d",cpt),(GThreadFunc)(quorra_plugins[cpt]),data);
+		threads[cpt] = g_thread_new( g_strdup_printf("thread-%d",cpt),*((GThreadFunc *)&(quorra_plugins[cpt])),data);
 	}
 
 	g_usleep(3 * G_USEC_PER_SEC);

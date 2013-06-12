@@ -31,6 +31,6 @@
 #include <stdlib.h>
 
 gpointer quorra_listen(gpointer data);
-static void pingReceptionHandler(DBusGProxy* proxy, int ret);
+void pauseSignalHandler(DBusGProxy* proxy);
 
 #endif /* LISTENER_H_ */

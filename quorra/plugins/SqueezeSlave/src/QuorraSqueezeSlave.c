@@ -407,6 +407,7 @@ gboolean quorra_squeezeslave_nextsong(QuorraSqueezeSlaveObject * obj, gchar * na
 
 gboolean quorra_squeezeslave_pause(QuorraSqueezeSlaveObject * obj, gchar * name, GError **error)
 {
+	g_print ("quorra_squeezeslave_pause -> %s started!\n",name);
 	if (squeezeserver_execute(obj,g_strconcat(name," pause\n",NULL),NULL,error))
 	{
 		g_warning("quorra_squeezeslave_pause : execute failed!");
@@ -452,7 +453,7 @@ gpointer quorra_plugin_run(gpointer data)
 
 	obj = g_object_new (QUORRA_SQUEEZESLAVEOBJ_TYPE, NULL);
 
-	if (! quorra_squeezeslave_object_isConnected(obj))
+	if (! quorra_squeezeslave_object_isConnected((QuorraSqueezeSlaveObject *) obj))
 	{
 		g_warning ("SqueezeServer not connected, return.");
 		return NULL;
