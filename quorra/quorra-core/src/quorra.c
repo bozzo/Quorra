@@ -22,7 +22,6 @@
  **/
 #include "quorra.h"
 
-
 GKeyFile * load_config(GError ** error)
 {
 	GKeyFile * keyfile;
@@ -68,6 +67,8 @@ int main (int argc, char *argv[])
 	/*DBusGProxy * driver_proxy;*/
 	gpointer data[2];
 
+	QuorraMappingObject * quorraMapping;
+
 	g_type_init();
 
 	context = g_option_context_new ("- test tree model performance");
@@ -88,10 +89,17 @@ int main (int argc, char *argv[])
 		die ("Failed to open connection to bus", error);
 	}
 
-	/*driver_proxy = dbus_g_proxy_new_for_name (connection, DBUS_SERVICE_DBUS, DBUS_PATH_DBUS, DBUS_INTERFACE_DBUS);*/
+	quorraMapping = (QuorraMappingObject *)g_object_new (QUORRA_MAPPINGOBJ_TYPE, NULL);
+
+	quorra_mapping_object_setConnection(quorraMapping,connection);
+	quorra_mapping_object_setSignalName(quorraMapping,"playlistSongChanged");
+	quorra_mapping_object_setQuorraPath(quorraMapping,"/org/bozzo/Quorra/plg/QuorraSqueezeSlaveObject");
+	quorra_mapping_object_setQuorraServiceName(quorraMapping,"org.bozzo.Quorra.plg.QuorraSqueezeSlaveObject");
+	quorra_mapping_object_setQuorraInterfaceName(quorraMapping,"org.bozzo.quorra.plg.QuorraSqueezeSlaveInterface");
+	quorra_mapping_object_insertData(quorraMapping, "name","Squeezeslave");
 
 	data[0]=connection;
-	/*data[1]=driver_proxy;*/
+	data[1]="Squeezeslave";/*driver_proxy;*/
 
 	keyfile = load_config(&error);
 	/*filename = g_key_file_get_string (keyfile,"core","plugin",NULL);*/
@@ -137,7 +145,7 @@ int main (int argc, char *argv[])
 	g_usleep(3 * G_USEC_PER_SEC);
 
 	/* start the listener thread */
-	threads[++cpt] = g_thread_new("thread-listen",quorra_listen,data);
+	threads[++cpt] = g_thread_new("thread-listen",quorra_listen,(gpointer) quorraMapping);
 
 	for(cpt = 0; cpt < nbPlugins + 1; cpt++)
 	{

@@ -24,6 +24,7 @@
 #ifndef LISTENER_H_
 #define LISTENER_H_
 
+#include "QuorraMappingObject.h"
 #include <glib.h>
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-bindings.h>
@@ -31,6 +32,6 @@
 #include <stdlib.h>
 
 gpointer quorra_listen(gpointer data);
-void pauseSignalHandler(DBusGProxy* proxy);
+void pauseSignalHandler(DBusGProxy* proxy, int ret, gpointer data);
 
 #endif /* LISTENER_H_ */

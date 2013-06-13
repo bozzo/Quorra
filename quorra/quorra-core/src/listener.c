@@ -39,7 +39,7 @@ gpointer quorra_listen(gpointer data)
 	DBusGProxy *proxy;
 	/*gboolean out = FALSE;
 	int ret_signal;*/
-	gpointer * dataptr;
+	QuorraMappingObject * quorraMapping;
 	gchar * signalName,* quorraPath,* quorraServiceName,* quorraInterfaceName;
 
 	g_type_init ();
@@ -53,14 +53,12 @@ gpointer quorra_listen(gpointer data)
 	if (connection == NULL)
 		die ("Failed to open connection to bus", error);*/
 
-	dataptr = (gpointer *)data;
-	connection = (DBusGConnection *)(dataptr[0]);
-	/* FIXME get signal name from dataptr */
-	signalName = "playlistSongChanged";
-	quorraPath =  "/org/bozzo/Quorra/plg/QuorraSqueezeSlaveObject";
-	quorraServiceName =  "org.bozzo.Quorra.plg.QuorraSqueezeSlaveObject";
-	quorraInterfaceName =  "org.bozzo.quorra.plg.QuorraSqueezeSlaveInterface";
-
+	quorraMapping = (QuorraMappingObject *)data;
+	connection = quorra_mapping_object_getConnection(quorraMapping);
+	signalName = quorra_mapping_object_getSignalName(quorraMapping);
+	quorraPath =  quorra_mapping_object_getQuorraPath(quorraMapping);
+	quorraServiceName =  quorra_mapping_object_getQuorraServiceName(quorraMapping);
+	quorraInterfaceName =  quorra_mapping_object_getQuorraInterfaceName(quorraMapping);
 
 	g_print("listen : connected to dbus.\n");
 
@@ -104,7 +102,7 @@ gpointer quorra_listen(gpointer data)
 			 * d’un signal
 			 */
 			G_CALLBACK(pauseSignalHandler),
-			NULL,
+			quorraMapping,
 			NULL);
 
 	g_main_loop_run(loop);
@@ -112,9 +110,15 @@ gpointer quorra_listen(gpointer data)
 }
 
 /* fonction de rappel */
-void pauseSignalHandler(DBusGProxy* proxy)
+void pauseSignalHandler(DBusGProxy* proxy, int ret, gpointer data)
 {
+	QuorraMappingObject * quorraMapping;
+	gchar * name;
+
 	g_print("signal <-- playlistSongChanged\n");
+
+	quorraMapping = (QuorraMappingObject *)data;
+	name = quorra_mapping_object_findData(quorraMapping, "name");
 
 	/* Fonction qui appelle la méthode "HelloWorld" de façon synchrone.
 	 * - Ensuite vient la liste de tous les arguments d’entrée
@@ -123,7 +127,7 @@ void pauseSignalHandler(DBusGProxy* proxy)
 	 * - Ensuite la liste des arguments de sortie qui se termine par
 	 * une seconde constante : G_TYPE_INVALID
 	 */
-	dbus_g_proxy_call_no_reply (proxy, "Pause", G_TYPE_STRING, "Squeezeslave", G_TYPE_INVALID);
+	dbus_g_proxy_call_no_reply (proxy, "Pause", G_TYPE_STRING, name, G_TYPE_INVALID);
 
 	/*g_print("listen : method called.\n");*/
 }
