@@ -435,7 +435,7 @@ gpointer quorra_plugin_run(gpointer data)
 	GMainLoop * loop;
 	GIOChannel * channel;
 	gboolean success;
-	gpointer * dataptr;
+	QuorraMappingObject * quorraMapping;
 
 	g_type_init();
 
@@ -447,8 +447,8 @@ gpointer quorra_plugin_run(gpointer data)
 	{
 		die ("Failed to open connection to bus", error);
 	}*/
-	dataptr = (gpointer *)data;
-	connection = (DBusGConnection *)(dataptr[0]);
+	quorraMapping = (QuorraMappingObject *)data;
+	connection = quorra_mapping_object_getConnection(quorraMapping);
 	/*driver_proxy = (DBusGProxy *)(dataptr[1]);*/
 
 	obj = g_object_new (QUORRA_SQUEEZESLAVEOBJ_TYPE, NULL);

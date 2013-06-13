@@ -34,6 +34,7 @@
 #include <netdb.h>
 #include <glib/gprintf.h>
 
+#include "QuorraMappingObject.h"
 #include "QuorraXbmcObject.h"
 #include "QuorraXbmcGlue.h"
 #include "Xbmc.h"

@@ -65,7 +65,6 @@ int main (int argc, char *argv[])
 
 	DBusGConnection * connection;
 	/*DBusGProxy * driver_proxy;*/
-	gpointer data[2];
 
 	QuorraMappingObject * quorraMapping;
 
@@ -97,9 +96,6 @@ int main (int argc, char *argv[])
 	quorra_mapping_object_setQuorraServiceName(quorraMapping,"org.bozzo.Quorra.plg.QuorraSqueezeSlaveObject");
 	quorra_mapping_object_setQuorraInterfaceName(quorraMapping,"org.bozzo.quorra.plg.QuorraSqueezeSlaveInterface");
 	quorra_mapping_object_insertData(quorraMapping, "name","Squeezeslave");
-
-	data[0]=connection;
-	data[1]="Squeezeslave";/*driver_proxy;*/
 
 	keyfile = load_config(&error);
 	/*filename = g_key_file_get_string (keyfile,"core","plugin",NULL);*/
@@ -139,7 +135,7 @@ int main (int argc, char *argv[])
 		}
 
 		/* call our function in the module */
-		threads[cpt] = g_thread_new( g_strdup_printf("thread-%d",cpt),*((GThreadFunc *)&(quorra_plugins[cpt])),data);
+		threads[cpt] = g_thread_new( g_strdup_printf("thread-%d",cpt),*((GThreadFunc *)&(quorra_plugins[cpt])),(gpointer) quorraMapping);
 	}
 
 	g_usleep(3 * G_USEC_PER_SEC);

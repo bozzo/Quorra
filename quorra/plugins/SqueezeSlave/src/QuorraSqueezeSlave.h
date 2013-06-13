@@ -34,6 +34,7 @@
 #include <netdb.h>
 #include <glib/gprintf.h>
 
+#include "QuorraMappingObject.h"
 #include "QuorraSqueezeSlaveObject.h"
 #include "QuorraSqueezeSlaveGlue.h"
 #include "SqueezeServer.h"
