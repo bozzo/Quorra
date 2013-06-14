@@ -65,7 +65,7 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_quorra_OBJECTS = quorra.$(OBJEXT) listener.$(OBJEXT) \
-	QuorraMappingObject.$(OBJEXT)
+	QuorraMappingObject.$(OBJEXT) QuorraDbObject.$(OBJEXT)
 quorra_OBJECTS = $(am_quorra_OBJECTS)
 quorra_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -208,10 +208,10 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 
 # what flags you want to pass to the C compiler & linker
-AM_CFLAGS = $(GLIB_CFLAGS) -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/lib/glib-2.0/include -I/usr/include/dbus-1.0 --pedantic -Wall -O3 -rdynamic -g
-AM_LDFLAGS = $(GLIB_LIBS) -lgthread-2.0 -lglib-2.0 -ldbus-1 -lgobject-2.0 -ldbus-glib-1 -lgmodule-2.0
+AM_CFLAGS = $(GLIB_CFLAGS) -I/usr/include -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/lib/glib-2.0/include -I/usr/include/dbus-1.0 --pedantic -Wall -O3 -rdynamic -g
+AM_LDFLAGS = $(GLIB_LIBS) -lgthread-2.0 -lglib-2.0 -ldbus-1 -lgobject-2.0 -ldbus-glib-1 -lgmodule-2.0 -lpq
 INCLUDES = -DG_LOG_DOMAIN=\"Quorra\"
-quorra_SOURCES = quorra.c listener.c QuorraMappingObject.c
+quorra_SOURCES = quorra.c listener.c QuorraMappingObject.c  QuorraDbObject.c
 all: all-am
 
 .SUFFIXES:
@@ -302,6 +302,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/QuorraDbObject.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/QuorraMappingObject.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/listener.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/quorra.Po@am__quote@

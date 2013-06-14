@@ -27,8 +27,23 @@ AC_CHECK_HEADER([glib.h])
 AC_CHECK_HEADER([glib-object.h])
 AC_CHECK_HEADER([stdlib.h])
 AC_CHECK_HEADER([netdb.h])
+AC_CHECK_HEADER([libpq-fe.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
+AC_FUNC_MALLOC
+AC_FUNC_REALLOC
+
+AC_CHECK_FUNCS([PQconnectdb])
+
+AC_CHECK_FUNCS([g_type_init g_object_new g_malloc])
+AC_CHECK_FUNCS([g_option_context_new g_option_context_add_main_entries g_option_context_parse])
+AC_CHECK_FUNCS([g_log_set_handler g_key_file_get_string_list g_strdup_printf g_usleep])
+				
+AC_CHECK_FUNCS([g_module_symbol g_module_open g_module_error g_module_close])				
+AC_CHECK_FUNCS([g_thread_new g_thread_join])								
+AC_CHECK_FUNCS([g_main_loop_new g_main_loop_run])
+				
+AC_CHECK_FUNCS([dbus_g_bus_get dbus_g_proxy_new_for_name dbus_g_proxy_add_signal dbus_g_proxy_connect_signal dbus_g_proxy_call_no_reply])
 
 # Checks for library functions.
 AC_CONFIG_FILES([Makefile

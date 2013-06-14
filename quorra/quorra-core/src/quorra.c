@@ -67,6 +67,7 @@ int main (int argc, char *argv[])
 	/*DBusGProxy * driver_proxy;*/
 
 	QuorraMappingObject * quorraMapping;
+	QuorraMappingObject * quorraDb;
 
 	g_type_init();
 
@@ -89,6 +90,11 @@ int main (int argc, char *argv[])
 	}
 
 	quorraMapping = (QuorraMappingObject *)g_object_new (QUORRA_MAPPINGOBJ_TYPE, NULL);
+	quorraDb = (QuorraDbObject *)g_object_new (QUORRA_DBOBJ_TYPE, NULL);
+
+	quorra_db_object_initConnection(quorraDb,"jarjar.bozzo.org","5432","quorra","quorra","quorra3586");
+	g_print ("db connected!");
+	quorra_db_object_closeConnection(quorraDb);
 
 	quorra_mapping_object_setConnection(quorraMapping,connection);
 	quorra_mapping_object_setSignalName(quorraMapping,"playlistSongChanged");

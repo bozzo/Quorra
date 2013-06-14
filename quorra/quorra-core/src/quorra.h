@@ -25,6 +25,7 @@
 
 #include "listener.h"
 #include "QuorraMappingObject.h"
+#include "QuorraDbObject.h"
 #include <gmodule.h>
 #include <glib.h>
 #include <dbus/dbus-glib.h>
