@@ -36,7 +36,7 @@ static void quorra_db_object_init (QuorraDbObject * quorra_db)
 	priv = QUORRA_DBOBJ_GET_PRIVATE (quorra_db);
 	if (priv)
 	{
-		priv->connection = g_hash_table_new(g_str_hash,g_str_equal);
+		priv->connection = NULL;
 	}
 }
 
@@ -55,12 +55,18 @@ PGconn * quorra_db_object_getConnection(QuorraDbObject * obj)
 
 gboolean quorra_db_object_initConnection(QuorraDbObject * obj,
 										gchar * pghost,
-										gchar *pgport,
-										gchar *dbName,
-										gchar *login,
-										gchar *pwd)
+										gchar * pgport,
+										gchar * dbName,
+										gchar * login,
+										gchar * pwd)
 {
 	QuorraDbObjectPrivate * priv;
+
+	if (dbName == NULL)
+	{
+		g_warning("Connection to database failed: database isn't set!");
+		return FALSE;
+	}
 
 	priv = QUORRA_DBOBJ_GET_PRIVATE (obj);
 	if (priv)

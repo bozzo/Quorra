@@ -50,7 +50,9 @@ void die (const char *prefix, GError *error)
 
 int main (int argc, char *argv[])
 {
-	/*gchar *filename;*/
+	/* FIXME refactor */
+
+	gchar * dbHost, * dbPort, * dbDatabase, * dbLogin, * dbPasswd;
 	gchar ** plugins;
 	gsize nbPlugins;
 	gint cpt;
@@ -92,10 +94,9 @@ int main (int argc, char *argv[])
 	quorraMapping = (QuorraMappingObject *)g_object_new (QUORRA_MAPPINGOBJ_TYPE, NULL);
 	quorraDb = (QuorraDbObject *)g_object_new (QUORRA_DBOBJ_TYPE, NULL);
 
-	quorra_db_object_initConnection(quorraDb,"jarjar.bozzo.org","5432","quorra","quorra","quorra3586");
-	g_print ("db connected!");
-	quorra_db_object_closeConnection(quorraDb);
-
+	/*
+	 * Prepare data to send to threads and plugins.
+	 */
 	quorra_mapping_object_setConnection(quorraMapping,connection);
 	quorra_mapping_object_setSignalName(quorraMapping,"playlistSongChanged");
 	quorra_mapping_object_setQuorraPath(quorraMapping,"/org/bozzo/Quorra/plg/QuorraSqueezeSlaveObject");
@@ -103,9 +104,23 @@ int main (int argc, char *argv[])
 	quorra_mapping_object_setQuorraInterfaceName(quorraMapping,"org.bozzo.quorra.plg.QuorraSqueezeSlaveInterface");
 	quorra_mapping_object_insertData(quorraMapping, "name","Squeezeslave");
 
+	/*
+	 * Loading config file
+	 */
 	keyfile = load_config(&error);
 	/*filename = g_key_file_get_string (keyfile,"core","plugin",NULL);*/
 	plugins = g_key_file_get_string_list(keyfile,"core","plugin",&nbPlugins,NULL);
+	dbHost = g_key_file_get_value(keyfile,"core","db.host",NULL);
+	dbPort = g_key_file_get_value(keyfile,"core","db.port",NULL);
+	dbLogin = g_key_file_get_value(keyfile,"core","db.login",NULL);
+	dbPasswd = g_key_file_get_value(keyfile,"core","db.passwd",NULL);
+	dbDatabase = g_key_file_get_value(keyfile,"core","db.database",NULL);
+
+	/*
+	 * Connect to db
+	 */
+	quorra_db_object_initConnection(quorraDb,dbHost,dbPort,dbDatabase,dbLogin,dbPasswd);
+	quorra_db_object_closeConnection(quorraDb);
 
 	quorra_plugins = (QuorraPlugin **) g_malloc (nbPlugins * sizeof(QuorraPlugin *));
 	threads = (GThread **) g_malloc (nbPlugins * sizeof(GThread *));
