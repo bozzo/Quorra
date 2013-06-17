@@ -28,6 +28,7 @@ AC_CHECK_HEADER([glib-object.h])
 AC_CHECK_HEADER([stdlib.h])
 AC_CHECK_HEADER([netdb.h])
 AC_CHECK_HEADER([libpq-fe.h])
+AC_CHECK_HEADER([json-glib/json-glib.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_FUNC_MALLOC

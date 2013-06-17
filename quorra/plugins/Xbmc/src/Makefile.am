@@ -1,6 +1,6 @@
 # what flags you want to pass to the C compiler & linker
-AM_CFLAGS = $(GLIB_CFLAGS) -I../../../quorra-core/src -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/lib64/glib-2.0/include -I/usr/include/dbus-1.0 --pedantic -Wall -O3 -rdynamic
-AM_LDFLAGS =  $(GLIB_LIBS) -lgthread-2.0 -lglib-2.0 -ldbus-1 -lgobject-2.0 -ldbus-glib-1 -lgio-2.0
+AM_CFLAGS = $(GLIB_CFLAGS) -I../../../quorra-core/src -I/usr/include/json-glib-1.0 -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/lib64/glib-2.0/include -I/usr/include/dbus-1.0 --pedantic -Wall -O3 -rdynamic
+AM_LDFLAGS =  $(GLIB_LIBS) -lgthread-2.0 -lglib-2.0 -ldbus-1 -lgobject-2.0 -ldbus-glib-1 -lgio-2.0 -ljson-glib-1.0
 INCLUDES = -DG_LOG_DOMAIN=\"Quorra\"
 ACLOCAL_AMFLAGS = -I m4
 

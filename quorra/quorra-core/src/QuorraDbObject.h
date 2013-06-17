@@ -24,6 +24,7 @@
 #ifndef QUORRADBOBJECT_H_
 #define QUORRADBOBJECT_H_
 
+#include "QuorraMappingObject.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -79,5 +80,7 @@ gboolean quorra_db_object_initConnection(QuorraDbObject * obj,
 										gchar *pwd);
 
 gboolean quorra_db_object_closeConnection(QuorraDbObject * obj);
+
+QuorraMappingObject * quorra_db_object_getMappings(QuorraDbObject * obj);
 
 #endif /* QUORRADBOBJECT_H_ */

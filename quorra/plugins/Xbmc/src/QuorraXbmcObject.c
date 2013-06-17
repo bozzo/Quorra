@@ -73,7 +73,7 @@ void quorra_xbmc_object_setSocket(QuorraXbmcObject * obj, GSocket * socket)
 	}
 }
 
-gboolean quorra_xbmc_action_playlist(QuorraXbmcObject * obj, gchar ** cmd)
+gboolean quorra_xbmc_action_playlist(QuorraXbmcObject * obj, gchar * cmd)
 {
 	if (cmd == NULL)
 	{
@@ -81,7 +81,7 @@ gboolean quorra_xbmc_action_playlist(QuorraXbmcObject * obj, gchar ** cmd)
 		return FALSE;
 	}
 	/*songChanged((GObject *)obj,1,"test");*/
-
+	g_print("%s\n",cmd);
 
 	return TRUE;
 }
@@ -93,8 +93,10 @@ gboolean quorra_xbmc_object_listen_callback (GIOChannel * source, GIOCondition c
 	gchar buff[1024];
 	gint i;
 	gchar ** tokens;
-	gchar * tmp;
+	gchar * tmp, * tmp2, * input;
 	QuorraXbmcObject * obj;
+	JsonParser * parser;
+	JsonReader * reader;
 
 	if (source == NULL)
 	{
@@ -103,39 +105,62 @@ gboolean quorra_xbmc_object_listen_callback (GIOChannel * source, GIOCondition c
 	}
 
 	if (data == NULL)
-		{
-			g_warning("quorra_xbmc_object_listen_callback : data is NULL!");
-			return FALSE;
-		}
+	{
+		g_warning("quorra_xbmc_object_listen_callback : data is NULL!");
+		return FALSE;
+	}
 
 	obj = (QuorraXbmcObject *)data;
 
-	do
+	parser = json_parser_new ();
+
+	tmp = NULL;
+	input = NULL;
+
+	g_io_channel_read_chars (source, buff, 1024, &bytes_read, NULL);
+
+	if (bytes_read)
+	{
+		input = g_strndup(buff,bytes_read);
+	}
+
+	while (bytes_read)
 	{
 		g_io_channel_read_chars (source, buff, 1024, &bytes_read, NULL);
 		if (bytes_read)
 		{
-			/*tmp = g_strndup(buff,bytes_read);
-			tokens = g_strsplit(tmp," ",0);
-			i = g_strv_length (tokens);
-			if (i >= 2)
-			{
-				if (g_strcmp0 (tokens[1],"playlist") == 0)
-				{
-					quorra_xbmc_action_playlist(obj,tokens);
-				}
-			}
+			tmp2 = g_strndup(buff,bytes_read);
 
-			for (i = 0; tokens[i] != NULL; i++)
-			{
-				g_print("--> %s\n",g_uri_unescape_string(tokens[i],""));
-			}
-			free(tmp);
-			g_strfreev(tokens);
-			g_print ("\n");*/
+			tmp = g_strconcat(input,tmp2,NULL);
+			g_free(input);
+			g_free(tmp2);
+
+			input = g_strdup(tmp);
+			g_free(tmp);
 		}
 	}
-	while (bytes_read);
+
+	if (! json_parser_load_from_data (parser, input, -1, NULL))
+	{
+		g_warning("Unable to parse input!\n");
+	}
+
+	reader = json_reader_new (json_parser_get_root (parser));
+	if (! reader)
+	{
+		g_warning("Unable create reader!\n");
+	}
+
+	json_reader_read_member (reader, "method");
+
+	quorra_xbmc_action_playlist(obj,json_reader_get_string_value (reader));
+
+	json_reader_end_member (reader);
+
+	g_object_unref (reader);
+	g_object_unref (parser);
+
+	g_free(input);
 
 	return TRUE;
 }
@@ -155,66 +180,66 @@ gboolean quorra_xbmc_playpause(QuorraXbmcObject * obj, gint playerid, gboolean *
 }
 
 /*
- *  * DBus Signals
- *   */
+ * DBus Signals
+ */
 gboolean PlayerOnPlay(GObject *obj, gchar * sender)
 {
 
-    return TRUE;
+	return TRUE;
 }
 
 gboolean PlayerOnPause(GObject *obj, gchar * sender)
 {
 
-    return TRUE;
+	return TRUE;
 }
 
 gboolean PlayerOnStop(GObject *obj, gchar * sender)
 {
 
-    return TRUE;
+	return TRUE;
 }
 
 gboolean PlayerOnSeek(GObject *obj, gchar * sender)
 {
 
-    return TRUE;
+	return TRUE;
 }
 
 gboolean PlaylistOnClear(GObject *obj, gchar * sender)
 {
 
-    return TRUE;
+	return TRUE;
 }
 
 gboolean PlaylistOnAdd(GObject *obj, gchar * sender)
 {
 
-    return TRUE;
+	return TRUE;
 }
 
 gboolean SystemOnQuit(GObject *obj, gchar * sender)
 {
 
-    return TRUE;
+	return TRUE;
 }
 
 gboolean VideoLibraryOnUpdate(GObject *obj, gchar * sender)
 {
 
-    return TRUE;
+	return TRUE;
 }
 
 gboolean GUIOnScreensaverDeactivated(GObject *obj, gchar * sender)
 {
 
-    return TRUE;
+	return TRUE;
 }
 
 gboolean GUIOnScreensaverActivated(GObject *obj, gchar * sender)
 {
 
-    return TRUE;
+	return TRUE;
 }
 
 
